@@ -16,8 +16,11 @@
     <Filter Include="源文件\GUI">
       <UniqueIdentifier>{b6729e9d-38fa-4222-a879-e184d8327093}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Render">
-      <UniqueIdentifier>{95dacd10-aebb-4780-9146-ec94ab066d86}</UniqueIdentifier>
+    <Filter Include="头文件\render">
+      <UniqueIdentifier>{2b6d33a0-208f-486a-8c8c-71f4db233731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\render">
+      <UniqueIdentifier>{3356cae1-7160-4775-95c0-dc24cbbba0e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,5 +30,13 @@
     <ClCompile Include="glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="render\shader.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="render\shader.h">
+      <Filter>头文件\render</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

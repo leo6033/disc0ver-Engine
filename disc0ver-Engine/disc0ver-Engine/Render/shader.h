@@ -5,6 +5,9 @@
  * @Date: 2020-09-24
  */
 #pragma once
+#ifndef SHADER_H
+#define SHADER_H
+
 #include<glad/glad.h>
 #include<string>
 #include<fstream>
@@ -19,7 +22,10 @@ namespace disc0ver {
 		void use();
 		template<typename T>
 		void setValue(const std::string& name, T value) const;
-	//private:
-	//	void read(const GLchar* path, std::ifstream fileStream, )
+	private:
+		void read(const GLchar* path, std::ifstream& shaderFile, std::string& code) const;
+		void errorCheck(unsigned int shader, std::string type) const;
 	};
 }
+
+#endif
