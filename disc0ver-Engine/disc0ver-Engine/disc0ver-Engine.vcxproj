@@ -147,9 +147,11 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="render\graph.cpp" />
     <ClCompile Include="render\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="render\graph.h" />
     <ClInclude Include="render\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

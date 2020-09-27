@@ -33,9 +33,15 @@
     <ClCompile Include="render\shader.cpp">
       <Filter>源文件\render</Filter>
     </ClCompile>
+    <ClCompile Include="render\graph.cpp">
+      <Filter>源文件\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="render\shader.h">
+      <Filter>头文件\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\graph.h">
       <Filter>头文件\render</Filter>
     </ClInclude>
   </ItemGroup>
