@@ -1,10 +1,19 @@
+/*
+ * @Description:
+ * @Author: 妄想
+ * @Email: long452a@163.com
+ * @Date: 2020-09-27
+ */
+
 #pragma once
 #ifndef GRAPH_H
-#define SHADER_H
+#define GRAPH_H
 
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
-#include<vector>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <vector>
+
+#include "texture.h"
 
 namespace disc0ver {
 	// 顶点
@@ -20,9 +29,10 @@ namespace disc0ver {
 		virtual void Init() = 0; // 创建模型
 		virtual void resize() = 0; // 
 		virtual void draw() = 0; // 绘制图形
+		virtual void addTexture(const GLchar* texturePath) = 0;
 	private:
-		std::vector<vertex> vertices;
-		std::vector<unsigned int> indices;
+		const std::vector<vertex> vertices;
+		const std::vector<unsigned int> indices;
 	};
 
 	class rectangleModel : public IBaseModel {
@@ -31,6 +41,8 @@ namespace disc0ver {
 		virtual void Init();
 		virtual void resize();
 		virtual void draw();
+		virtual void addTexture(const GLchar* texturePath);
+		std::vector<Texture> textures;
 	private:
 		std::vector<vertex> vertices = {
 			//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -

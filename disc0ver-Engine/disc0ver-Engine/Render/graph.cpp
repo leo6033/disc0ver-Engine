@@ -1,4 +1,11 @@
-#include"graph.h"
+/*
+ * @Description:
+ * @Author: НэПл
+ * @Email: long452a@163.com
+ * @Date: 2020-09-27
+ */
+
+#include "graph.h"
 
 disc0ver::rectangleModel::~rectangleModel()
 {
@@ -27,7 +34,6 @@ void disc0ver::rectangleModel::Init() {
 
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(6 * sizeof(vertex) / 8));
 	glEnableVertexAttribArray(2);
-
 }
 
 void disc0ver::rectangleModel::resize()
@@ -36,6 +42,17 @@ void disc0ver::rectangleModel::resize()
 
 void disc0ver::rectangleModel::draw()
 {
+	for (int i = 0; i < textures.size(); i++) {
+		Texture texture = textures[i];
+		texture.use(i);
+	}
+
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void disc0ver::rectangleModel::addTexture(const GLchar* texturePath)
+{
+	Texture texture(texturePath);
+	textures.push_back(texture);
 }
