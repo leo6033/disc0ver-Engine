@@ -4,7 +4,8 @@
  * @Email: long452a@163.com
  * @Date: 2020-09-24
  */
-#include"shader.h"
+
+#include "shader.h"
 
 disc0ver::Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 	std::string vertexCode, fragmentCode;
@@ -48,12 +49,6 @@ disc0ver::Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 
 void disc0ver::Shader::use() {
 	glUseProgram(ID);
-}
-
-template<typename T>
-void disc0ver::Shader::setValue(const std::string& name, T value) const
-{
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
 void disc0ver::Shader::read(const GLchar* path, std::ifstream& shaderFile, std::string& code) const
