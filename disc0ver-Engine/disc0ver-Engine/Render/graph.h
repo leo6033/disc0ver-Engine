@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "texture.h"
+#include "transform.h"
 
 namespace disc0ver {
 	// 顶点
@@ -43,6 +44,7 @@ namespace disc0ver {
 		virtual void draw();
 		virtual void addTexture(const GLchar* texturePath);
 		std::vector<Texture> textures;
+		Transform transform;
 	private:
 		std::vector<vertex> vertices = {
 			//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
