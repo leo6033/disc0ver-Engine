@@ -32,7 +32,7 @@ namespace disc0ver {
 		void use();
 	//private:
 		Rotation rotation = { 0.0f, 0.0f, 0.0f };
-		Position position = { 0.5f, 0.0f, 0.0f };
+		Position position = { 0.0f, 0.0f, 0.0f };
 		Scale scale = { 1.0f, 1.0f, 1.0f };
 	};
 }

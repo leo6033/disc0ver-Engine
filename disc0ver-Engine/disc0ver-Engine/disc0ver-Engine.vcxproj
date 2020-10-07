@@ -147,12 +147,14 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="render\camera.cpp" />
     <ClCompile Include="render\graph.cpp" />
     <ClCompile Include="render\shader.cpp" />
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="render\camera.h" />
     <ClInclude Include="render\graph.h" />
     <ClInclude Include="render\shader.h" />
     <ClInclude Include="render\texture.h" />
