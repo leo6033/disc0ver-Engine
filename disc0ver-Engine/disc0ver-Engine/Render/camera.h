@@ -45,6 +45,10 @@ namespace disc0ver {
 		float mouse_sensitivity_;
 		float zoom_;
 
+	public:
+		IBaseCamera(): forward_(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed_(SPEED),
+			mouse_sensitivity_(SENSITIVITY), zoom_(ZOOM) {};
+
 		glm::mat4 GetViewMatrix() const;
 		virtual void ProcessKeyboard() {};
 		virtual void ProcessMouseMovement() {};
@@ -55,17 +59,23 @@ namespace disc0ver {
 
 	class FPSCamera : public IBaseCamera {
 	public:
-		FPSCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
-		FPSCamera(float pos_x, float pos_y, float pos_z, float up_x, float up_y, float up_z, float yaw, float pitch);
+		FPSCamera(
+			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), 
+			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), 
+			float yaw = YAW, 
+			float pitch = PITCH
+		);
+		
+		FPSCamera(
+			float pos_x, float pos_y, float pos_z, 
+			float up_x, float up_y, float up_z, 
+			float yaw, 
+			float pitch
+		);
+	public:
 		void ProcessKeyboard(CameraMovement direction, float deltaTime);
 		void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 		void ProcessMouseScroll(float yoffset);
-	private:
-		void Init() {
-			forward_ = glm::vec3(0.0f, 0.0f, -1.0f);
-			movement_speed_ = SPEED;
-			mouse_sensitivity_ = SENSITIVITY;
-			zoom_ = ZOOM;
-		}
+
 	};
 }

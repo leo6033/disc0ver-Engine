@@ -31,9 +31,8 @@ void disc0ver::IBaseCamera::UpdateCameraVectors()
 }
 
 /*************************************** FPSCamera ***************************************************/
-disc0ver::FPSCamera::FPSCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
+disc0ver::FPSCamera::FPSCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) : IBaseCamera()
 {
-	Init();
 	position_ = position;
 	world_up_ = up;
 	yaw_ = yaw;
@@ -41,9 +40,8 @@ disc0ver::FPSCamera::FPSCamera(glm::vec3 position, glm::vec3 up, float yaw, floa
 	UpdateCameraVectors();
 }
 
-disc0ver::FPSCamera::FPSCamera(float pos_x, float pos_y, float pos_z, float up_x, float up_y, float up_z, float yaw, float pitch)
+disc0ver::FPSCamera::FPSCamera(float pos_x, float pos_y, float pos_z, float up_x, float up_y, float up_z, float yaw, float pitch) : IBaseCamera()
 {
-	Init();
 	position_ = glm::vec3(pos_x, pos_y, pos_z);
 	world_up_ = glm::vec3(up_x, up_y, up_z);
 	yaw_ = yaw;
