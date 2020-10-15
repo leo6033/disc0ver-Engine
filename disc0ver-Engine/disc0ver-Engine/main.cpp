@@ -60,9 +60,14 @@ int main() {
 	disc0ver::Shader shader("shader_test.vs", "shader_test.fs");
 
 	disc0ver::rectangleModel rect;
-	rect.Init();
-	rect.addTexture("wall.jpg");
-	rect.addTexture("awesomeface.png");
+	disc0ver::cubeModel cube;
+	//rect.Init();
+	//rect.addTexture("wall.jpg");
+	//rect.addTexture("awesomeface.png");
+
+	cube.Init();
+	cube.addTexture("texture1", "wall.jpg");
+	cube.addTexture("texture2", "awesomeface.png");
 
 	shader.use();
 	shader.setInt("texture1", (int)0);
@@ -79,8 +84,11 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		rect.transform.position.y = -0.5f;
-		rect.transform.rotation.z = (float)glfwGetTime();
+		//rect.transform.position.y = -0.5f;
+		//rect.transform.rotation.z = (float)glfwGetTime();
+
+		//cube.transform.position.y = -0.5f;
+		cube.transform.rotation.z = (float)glfwGetTime();
 
 		shader.use();
 
@@ -91,9 +99,11 @@ int main() {
 		shader.setMat4("view", view);
 
 		unsigned int transformLoc = glGetUniformLocation(shader.ID, "model");
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(rect.transform.trans));
+		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(rect.transform.trans));
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(cube.transform.trans));
 
-		rect.draw();
+		//rect.draw();
+		cube.draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
