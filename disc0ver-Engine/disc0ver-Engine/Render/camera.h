@@ -19,7 +19,14 @@ namespace disc0ver {
 		FORWARD,
 		BACKWARD,
 		LEFT,
-		RIGHT
+		RIGHT,
+		UP,
+		DOWN
+	};
+
+	enum CameraProjection {
+		PERSEPCTIVE,
+		ORTHO
 	};
 
 	const float YAW = -90.0f;
