@@ -13,13 +13,20 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 #include <iostream>
 #include <algorithm>
 
 #include "stb_image.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_callback1(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
@@ -44,11 +51,11 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
+	//glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
@@ -56,6 +63,12 @@ int main() {
 	}
 
     glEnable(GL_DEPTH_TEST);
+
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 420 core");
+	ImGui::StyleColorsClassic();
 
 	disc0ver::Shader shader("shader_test.vs", "shader_test.fs");
 
@@ -73,7 +86,24 @@ int main() {
 	shader.setInt("texture1", (int)0);
 	shader.setInt("texture2", (int)1);
 
+	bool show_demo_window = true;
+
 	while (!glfwWindowShouldClose(window)) {
+
+		glfwPollEvents();
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		{
+			ImGui::Begin("Another Window", &show_demo_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Text("Hello from another window!");
+			if (ImGui::Button("Close Me"))
+				glfwSetWindowShouldClose(window, true);
+			ImGui::End();
+		}
+		ImGui::Render();
 
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
@@ -104,10 +134,14 @@ int main() {
 
 		//rect.draw();
 		cube.draw();
-
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		
 		glfwSwapBuffers(window);
-		glfwPollEvents();
 	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	glfwTerminate();
 
@@ -132,6 +166,26 @@ void processInput(GLFWwindow* window) {
 		camera.ProcessKeyboard(disc0ver::RIGHT, deltaTime);
 }
 
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) 
+{
+	if (action == GLFW_PRESS) switch (button)
+	{
+	case GLFW_MOUSE_BUTTON_RIGHT:
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetCursorPosCallback(window, mouse_callback);
+		break;
+	default:
+		return;
+	}
+	if (action != GLFW_PRESS) {
+		firstMouse = true;
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetCursorPosCallback(window, mouse_callback1);
+	}
+		
+	return;
+}
+
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (firstMouse)
@@ -148,6 +202,10 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastY = ypos;
 
 	camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void mouse_callback1(GLFWwindow* window, double xpos, double ypos)
+{
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
