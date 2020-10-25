@@ -30,7 +30,7 @@ disc0ver::Texture::Texture(const GLchar* texturePath)
 	unsigned char* data = stbi_load(texturePath, &width, &height, &nrChannels, 0);
 	if (data) {
 		// TODO: 不同类型的图片选取什么读取方式优化
-		if (std::string(texturePath).find(".png") != -1) {
+		if (nrChannels == 4) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
