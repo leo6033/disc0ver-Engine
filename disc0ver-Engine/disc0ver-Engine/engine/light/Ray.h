@@ -9,11 +9,16 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "../../UGM/ray.h"
+#include "../../math/DGM.h"
 
 namespace disc0ver {
 	class Ray {
+	public:
+		
 
+	public:
+		float tMax;
+		float tMin;
 	};
 }
 

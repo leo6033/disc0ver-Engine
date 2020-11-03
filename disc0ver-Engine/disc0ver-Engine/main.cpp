@@ -118,7 +118,7 @@ int main() {
 		//rect.transform.rotation.z = (float)glfwGetTime();
 
 		//cube.transform.position.y = -0.5f;
-		cube.transform.rotation.z = (float)glfwGetTime();
+		cube.transform.rotation = {cube.transform.rotation.x(), cube.transform.rotation.y(), (float)glfwGetTime() };
 
 		shader.use();
 

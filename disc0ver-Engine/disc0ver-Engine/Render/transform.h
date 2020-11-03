@@ -14,21 +14,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
 
+#include "../math/DGM.h"
+
 namespace disc0ver {
-	struct Rotation {
-		float x, y, z;
-	};
-
-	struct Position {
-		float x, y, z;
-	};
-
-	struct Scale {
-		float x, y, z;
-	};
 
 	class Transform {
 	public:
+		Transform() = default;
+		Transform(Rotation rotation, Position position, Scale scale) : rotation(rotation), position(position), scale(scale), trans(glm::mat4(1.0)) {}
 		glm::mat4 trans;
 		void use();
 	//private:

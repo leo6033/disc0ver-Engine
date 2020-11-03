@@ -37,6 +37,9 @@
     <Filter Include="源文件\engine\light">
       <UniqueIdentifier>{5f73b1b1-a513-4d8a-9ff9-fd6de97c796c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\math">
+      <UniqueIdentifier>{577eae13-e0c9-49c7-9c5b-8745774f382e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -118,6 +121,18 @@
     </ClInclude>
     <ClInclude Include="imgui\imgui_impl_opengl3.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\light\light.h">
+      <Filter>头文件\engine\light</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\light\Ray.h">
+      <Filter>头文件\engine\light</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\light\RayTracer.h">
+      <Filter>头文件\engine\light</Filter>
+    </ClInclude>
+    <ClInclude Include="DGM.h">
+      <Filter>头文件\math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
