@@ -29,12 +29,19 @@ namespace disc0ver {
 		vec3(float e0, float e1, float e2) { e[0] = e0; e[1] = e1; e[2] = e2; }
 
 		
-		inline float x() { static_assert(T == TRANSFORM, "RGB has no contribute x, please use r"); return e[0]; }
-		inline float y() { static_assert(T == TRANSFORM, "RGB has no contribute y, please use g"); return e[1]; }
-		inline float z() { static_assert(T == TRANSFORM, "RGB has no contribute z, please use b"); return e[2]; }
-		inline float r() { static_assert(T == RGB, "TRANSFORM has no contribute r, please use x"); return e[0]; }
-		inline float g() { static_assert(T == RGB, "TRANSFORM has no contribute g, please use y"); return e[1]; }
-		inline float b() { static_assert(T == RGB, "TRANSFORM has no contribute b, please use z"); return e[2]; }
+		inline float get_x() { static_assert(T == TRANSFORM, "RGB has no contribute x, please use r"); return e[0]; }
+		inline float get_y() { static_assert(T == TRANSFORM, "RGB has no contribute y, please use g"); return e[1]; }
+		inline float get_z() { static_assert(T == TRANSFORM, "RGB has no contribute z, please use b"); return e[2]; }
+		inline float get_r() { static_assert(T == RGB, "TRANSFORM has no contribute r, please use x"); return e[0]; }
+		inline float get_g() { static_assert(T == RGB, "TRANSFORM has no contribute g, please use y"); return e[1]; }
+		inline float get_b() { static_assert(T == RGB, "TRANSFORM has no contribute b, please use z"); return e[2]; }
+
+		inline void set_x(float value) { static_assert(T == TRANSFORM, "RGB has no contribute x, please use r"); e[0] = value; }
+		inline void set_y(float value) { static_assert(T == TRANSFORM, "RGB has no contribute y, please use g"); e[1] = value; }
+		inline void set_z(float value) { static_assert(T == TRANSFORM, "RGB has no contribute z, please use b"); e[2] = value; }
+		inline void set_r(float value) { static_assert(T == RGB, "TRANSFORM has no contribute r, please use x"); e[0] = value; }
+		inline void set_g(float value) { static_assert(T == RGB, "TRANSFORM has no contribute g, please use y"); e[1] = value; }
+		inline void set_b(float value) { static_assert(T == RGB, "TRANSFORM has no contribute b, please use z"); e[2] = value; }
 
 		inline const vec3& operator+() const { return *this; }
 		inline vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
@@ -51,8 +58,14 @@ namespace disc0ver {
 		inline float length() const { return sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
 		inline float squared_length() const { return e[0] * e[0] + e[1] * e[1] + e[2] * e[2]; }
 		inline void normalize();
-
+		
 		float e[3];
+		__declspec(property(get = get_x, put = set_x)) float x;
+		__declspec(property(get = get_y, put = set_y)) float y;
+		__declspec(property(get = get_z, put = set_z)) float z;
+		__declspec(property(get = get_r, put = set_r)) float r;
+		__declspec(property(get = get_g, put = set_g)) float g;
+		__declspec(property(get = get_b, put = set_b)) float b;
 	};
 
 	using Rotation = vec3<TRANSFORM>;
