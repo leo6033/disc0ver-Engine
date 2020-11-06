@@ -9,7 +9,6 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include <../../UGM/rgb.h>
 #include "../../render/transform.h"
 
 namespace disc0ver {
@@ -17,10 +16,10 @@ namespace disc0ver {
 	class Light {
 	protected:
 		Light() = default;
-		Light(Position position = { 0.0f, 0.0f, 0.0f }, Rotation rotation = { 0.0f, 0.0f, 0.0f }, Scale scale = { 1.0f, 1.0f, 1.0f }, Ubpa::rgbf color = Ubpa::rgbf()) : transform(rotation, position, scale), color(color) {}
+		Light(Position position = { 0.0f, 0.0f, 0.0f }, Rotation rotation = { 0.0f, 0.0f, 0.0f }, Scale scale = { 1.0f, 1.0f, 1.0f }, rgb color = { 1.0f,1.0f,1.0f }) : transform(rotation, position, scale), color(color) {}
 		virtual ~Light() = default;
 	public:
-		Ubpa::rgbf color;
+		rgb color;
 		Transform transform;
 	};
 }

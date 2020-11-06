@@ -131,7 +131,7 @@
     <ClInclude Include="engine\light\RayTracer.h">
       <Filter>头文件\engine\light</Filter>
     </ClInclude>
-    <ClInclude Include="DGM.h">
+    <ClInclude Include="math\DGM.h">
       <Filter>头文件\math</Filter>
     </ClInclude>
   </ItemGroup>

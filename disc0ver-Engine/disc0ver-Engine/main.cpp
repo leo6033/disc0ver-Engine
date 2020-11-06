@@ -8,6 +8,7 @@
 #include "render/shader.h"
 #include "render/graph.h"
 #include "render/camera.h"
+#include "engine/light/light.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -72,6 +73,7 @@ int main() {
 
 	disc0ver::Shader shader("shader_test.vs", "shader_test.fs");
 
+	disc0ver::Light light();
 	disc0ver::rectangleModel rect;
 	disc0ver::cubeModel cube;
 	//rect.Init();
@@ -79,12 +81,15 @@ int main() {
 	//rect.addTexture("awesomeface.png");
 
 	cube.Init();
-	cube.addTexture("texture1", "wall.jpg");
-	cube.addTexture("texture2", "awesomeface.png");
+	/*cube.addTexture("texture1", "wall.jpg");
+	cube.addTexture("texture2", "awesomeface.png");*/
 
 	shader.use();
-	shader.setInt("texture1", (int)0);
-	shader.setInt("texture2", (int)1);
+	//shader.setInt("texture1", (int)0);
+	//shader.setInt("texture2", (int)1);
+
+	shader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+	shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
 	bool show_demo_window = true;
 
@@ -111,14 +116,14 @@ int main() {
 
 		processInput(window);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//rect.transform.position.y = -0.5f;
 		//rect.transform.rotation.z = (float)glfwGetTime();
 
 		//cube.transform.position.y = -0.5f;
-		cube.transform.rotation = {cube.transform.rotation.x(), cube.transform.rotation.y(), (float)glfwGetTime() };
+		cube.transform.rotation.z = (float)glfwGetTime();
 
 		shader.use();
 
