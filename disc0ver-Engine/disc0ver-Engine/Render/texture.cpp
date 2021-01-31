@@ -29,14 +29,28 @@ disc0ver::Texture::Texture(const GLchar* texturePath)
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load(texturePath, &width, &height, &nrChannels, 0);
 	if (data) {
-		// TODO: 不同类型的图片选取什么读取方式优化
-		if (nrChannels == 4) {
+		if (nrChannels == 1)
+		{
+			//  RED
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		if (nrChannels == 3)
+		{
+			//  RGB
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else if (nrChannels == 4)
+		{
+			//  RGBA
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
-		else {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
+		else
+		{
+			//  c++ error stream
+			std::cerr << "Texture image channel numbers error.\n";
 		}
 	}
 	else {
