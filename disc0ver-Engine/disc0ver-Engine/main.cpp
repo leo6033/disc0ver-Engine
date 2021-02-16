@@ -71,7 +71,7 @@ int main() {
 	ImGui_ImplOpenGL3_Init("#version 420 core");
 	ImGui::StyleColorsClassic();
 
-	disc0ver::Shader shader("shader_test.vs", "shader_test.fs");
+	disc0ver::Shader shader("shader/shader_test.vs", "shader/shader_test.fs");
 
 	disc0ver::Light light();
 	disc0ver::rectangleModel rect;
@@ -106,6 +106,11 @@ int main() {
 			ImGui::Text("Hello from another window!");
 			if (ImGui::Button("Close Me"))
 				glfwSetWindowShouldClose(window, true);
+			if (ImGui::Button("new window"))
+			{
+				GLFWwindow* newwindow = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "new window", NULL, NULL);
+				
+			}
 			ImGui::End();
 		}
 		ImGui::Render();
