@@ -54,12 +54,12 @@ namespace disc0ver {
 
 	public:
 		IBaseCamera(): forward_(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed_(SPEED),
-			mouse_sensitivity_(SENSITIVITY), zoom_(ZOOM) {};
+			mouse_sensitivity_(SENSITIVITY), zoom_(ZOOM) {}
 
 		glm::mat4 GetViewMatrix() const;
-		virtual void ProcessKeyboard() {};
-		virtual void ProcessMouseMovement() {};
-		virtual void ProcessMouseScroll() {};
+		virtual void ProcessKeyboard() {}
+		virtual void ProcessMouseMovement() {}
+		virtual void ProcessMouseScroll() {}
 	protected:
 		void UpdateCameraVectors();
 	};

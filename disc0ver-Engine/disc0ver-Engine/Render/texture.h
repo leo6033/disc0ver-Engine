@@ -18,7 +18,7 @@ namespace disc0ver {
 	class Texture {
 	public:
 		unsigned int texture;
-		Texture() {};
+		Texture() {}
 		Texture(const GLchar* texturePath);
 		void use(int ID);
 	};
