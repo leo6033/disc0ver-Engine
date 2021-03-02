@@ -21,10 +21,9 @@ namespace disc0ver {
 
 	class IBaseModel {
 	public:
-		unsigned int VAO, VBO, EBO;
 		virtual void Init() = 0; // 创建模型
-		virtual void resize() = 0; // 
-		virtual void draw() = 0; // 绘制图形
+		// virtual void resize() = 0; // 
+		virtual void draw(Shader &shader) = 0; // 绘制图形
 		virtual void addTexture(std::string textureName, const GLchar* texturePath) = 0;
 	private:
 		const std::vector<Vertex> vertices;
@@ -35,13 +34,14 @@ namespace disc0ver {
 	public:
 		~rectangleModel();
 		void Init() override;
-		void resize() override;
-		void draw() override;
+		//void resize() override;
+		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
 		Transform transform;
 	private:
-		std::vector<vertex> vertices = {
+		std::vector<Mesh> meshes;
+		std::vector<Vertex> vertices = {
 			//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
 			{ 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f},   // 右上
 			{ 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f},   // 右下
@@ -58,12 +58,13 @@ namespace disc0ver {
 	public:
 		~cubeModel();
 		void Init() override;
-		void resize() override;
-		void draw() override;
+		// void resize() override;
+		void draw(Shader &shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
 		Transform transform;
 	private:
+		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices = {
 			//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
 			{-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f},
@@ -121,10 +122,20 @@ namespace disc0ver {
 		};
 	};
 
-	class Model: public IBaseModel
-	{
-	public:
-		
-	};
+	//class Model: public IBaseModel
+	//{
+	//public:
+	//	Model(char* path)
+	//	{
+	//		loadModel(path);
+	//	}
+
+	//private:
+	//	std::vector<Mesh> meshes;
+	//	std::string directory;
+
+	//	void loadModel(std::string path);
+	//	void processNode(aiNode )
+	//};
 }
 #endif
