@@ -15,39 +15,33 @@
 #include <map>
 
 #include "texture.h"
-#include "transform.h"
+#include "mesh.h"
 
 namespace disc0ver {
-	// 顶点
-	struct vertex {
-		float x, y, z; // 坐标
-		float r, g, b; // 颜色
-		float u, v;  // 贴图坐标
-	};
 
 	class IBaseModel {
 	public:
-		unsigned int VAO, VBO, EBO;
 		virtual void Init() = 0; // 创建模型
-		virtual void resize() = 0; // 
-		virtual void draw() = 0; // 绘制图形
+		// virtual void resize() = 0; // 
+		virtual void draw(Shader &shader) = 0; // 绘制图形
 		virtual void addTexture(std::string textureName, const GLchar* texturePath) = 0;
 	private:
-		const std::vector<vertex> vertices;
+		const std::vector<Vertex> vertices;
 		const std::vector<unsigned int> indices;
 	};
 
 	class rectangleModel : public IBaseModel {
 	public:
 		~rectangleModel();
-		virtual void Init();
-		virtual void resize();
-		virtual void draw();
-		virtual void addTexture(std::string textureName, const GLchar* texturePath);
+		void Init() override;
+		//void resize() override;
+		void draw(Shader& shader) override;
+		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
 		Transform transform;
 	private:
-		std::vector<vertex> vertices = {
+		std::vector<Mesh> meshes;
+		std::vector<Vertex> vertices = {
 			//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
 			{ 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f},   // 右上
 			{ 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f},   // 右下
@@ -63,14 +57,15 @@ namespace disc0ver {
 	class cubeModel : IBaseModel {
 	public:
 		~cubeModel();
-		virtual void Init();
-		virtual void resize();
-		virtual void draw();
-		virtual void addTexture(std::string textureName, const GLchar* texturePath);
+		void Init() override;
+		// void resize() override;
+		void draw(Shader &shader) override;
+		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
 		Transform transform;
 	private:
-		std::vector<vertex> vertices = {
+		std::vector<Mesh> meshes;
+		std::vector<Vertex> vertices = {
 			//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
 			{-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f},
 			{ 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f},
@@ -126,5 +121,21 @@ namespace disc0ver {
 			21, 22, 23
 		};
 	};
+
+	//class Model: public IBaseModel
+	//{
+	//public:
+	//	Model(char* path)
+	//	{
+	//		loadModel(path);
+	//	}
+
+	//private:
+	//	std::vector<Mesh> meshes;
+	//	std::string directory;
+
+	//	void loadModel(std::string path);
+	//	void processNode(aiNode )
+	//};
 }
 #endif

@@ -18,9 +18,12 @@ namespace disc0ver {
 	class Texture {
 	public:
 		unsigned int texture;
-		Texture() {};
-		Texture(const GLchar* texturePath);
-		void use(int ID);
+		Texture() {}
+		Texture(std::string textureName, const GLchar* texturePath);
+		void use(unsigned int ID);
+		std::string getName() const { return textureName; }
+	private:
+		std::string textureName;
 	};
 }
 

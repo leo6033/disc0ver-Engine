@@ -14,8 +14,11 @@
 
 #include "texture.h"
 
-disc0ver::Texture::Texture(const GLchar* texturePath)
+#include <utility>
+
+disc0ver::Texture::Texture(std::string textureName, const GLchar* texturePath)
 {
+	this->textureName = std::move(textureName);
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	// 为当前绑定的纹理对象设置环绕、过滤方式
@@ -59,7 +62,7 @@ disc0ver::Texture::Texture(const GLchar* texturePath)
 	stbi_image_free(data);
 }
 
-void disc0ver::Texture::use(int ID)
+void disc0ver::Texture::use(unsigned int ID)
 {
 	glActiveTexture(GL_TEXTURE0 + ID);
 	glBindTexture(GL_TEXTURE_2D, texture);
