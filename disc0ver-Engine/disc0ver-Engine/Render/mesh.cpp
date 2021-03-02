@@ -15,6 +15,22 @@ disc0ver::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> ind
 	setupMesh();
 }
 
+void disc0ver::Mesh::Draw(Shader &shader)
+{
+	for(unsigned int i = 0; i < textures.size(); i ++)
+	{
+        textures[i].use(i);
+        shader.setInt(textures[i].getName(), static_cast<int>(i));
+	}
+	
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    //glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+    glBindVertexArray(0);
+	
+    glActiveTexture(GL_TEXTURE0);
+}
+
 void disc0ver::Mesh::setupMesh()
 {
     glGenVertexArrays(1, &VAO);

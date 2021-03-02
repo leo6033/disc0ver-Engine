@@ -22,6 +22,8 @@ namespace disc0ver
 		Position position;	// 坐标
 		vec3<TRANSFORM> normal;	// 顶点法向
 		glm::vec2 texCoords;
+
+		Vertex(float x, float y, float z, float n1, float n2, float n3, float u, float v) : position(x, y, z), normal(n1, n2, n3), texCoords(u, v) {}
 	};
 	
 	class Mesh
@@ -31,13 +33,13 @@ namespace disc0ver
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
         std::vector<Texture> textures;
-        /*  函数  */
+
         Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-        void Draw(Shader shader);
+        void Draw(Shader &shader);
     private:
         /*  渲染数据  */
         unsigned int VAO, VBO, EBO;
-        /*  函数  */
+
         void setupMesh();
 	};
 }
