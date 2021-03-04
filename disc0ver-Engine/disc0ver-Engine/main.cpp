@@ -74,15 +74,18 @@ int main() {
 	disc0ver::Shader shader("shader/shader_test.vs", "shader/shader_test.fs");
 
 	disc0ver::Light light();
-	disc0ver::rectangleModel rect;
+	//disc0ver::rectangleModel rect;
 	disc0ver::cubeModel cube;
-	rect.Init();
-	rect.addTexture("texture1", "wall.jpg");
-	rect.addTexture("texture2", "awesomeface.png");
+	disc0ver::Model model("leo6033-2020.stl");
+	//rect.Init();
+	//rect.addTexture("texture1", "wall.jpg");
+	//rect.addTexture("texture2", "awesomeface.png");
 
-	//cube.Init();
-	//cube.addTexture("texture1", "wall.jpg");
-	//cube.addTexture("texture2", "awesomeface.png");
+	/*cube.Init();
+	cube.addTexture("texture1", "wall.jpg");
+	cube.addTexture("texture2", "awesomeface.png");*/
+
+	model.Init();
 
 	shader.use();
 
@@ -123,10 +126,14 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//rect.transform.position.y = -0.5f;
-		rect.transform.rotation.z = (float)glfwGetTime();
+		//rect.transform.rotation.z = (float)glfwGetTime();
 
 		//cube.transform.position.y = -0.5f;
 		//cube.transform.rotation.z = (float)glfwGetTime();
+
+		model.transform.position.y = -0.5f;
+		model.transform.rotation.z = (float)glfwGetTime();
+		model.transform.rotation.x = -90;
 
 		shader.use();
 
@@ -137,11 +144,13 @@ int main() {
 		shader.setMat4("view", view);
 
 		unsigned int transformLoc = glGetUniformLocation(shader.ID, "model");
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(rect.transform.trans));
+		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(rect.transform.trans));
 		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(cube.transform.trans));
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model.transform.trans));
 
-		rect.draw(shader);
+		//rect.draw(shader);
 		//cube.draw(shader);
+		model.draw(shader);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		
 		glfwSwapBuffers(window);
