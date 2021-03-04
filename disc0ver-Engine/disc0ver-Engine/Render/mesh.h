@@ -23,6 +23,7 @@ namespace disc0ver
 		vec3<TRANSFORM> normal;	// ¶¥µã·¨Ïò
 		glm::vec2 texCoords;
 
+		Vertex() = default;
 		Vertex(float x, float y, float z, float n1, float n2, float n3, float u, float v) : position(x, y, z), normal(n1, n2, n3), texCoords(u, v) {}
 	};
 	
