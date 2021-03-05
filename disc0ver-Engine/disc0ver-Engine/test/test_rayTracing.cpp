@@ -22,7 +22,7 @@
 const unsigned int SCR_WIDTH_raytracing = 800;
 const unsigned int SCR_HEIGHT_raytracing = 600;
 
-disc0ver::FPSCamera rayCamera(glm::vec3(0.0f, 0.0f, -3.0f));
+disc0ver::FPSCamera rayCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 float lastX_raytracing = SCR_WIDTH_raytracing / 2.0f;
 float lastY_raytracing = SCR_HEIGHT_raytracing / 2.0f;
@@ -84,7 +84,7 @@ int test_ray_tracing_main() {
 	disc0ver::rectangleModel canvas;
 
 	canvas.Init();
-	canvas.transform.position = { 0.5f, 0.5f, 0.0f };
+	canvas.transform.position = { 0.0f, 0.0f, 0.0f };
 	canvas.transform.scale = { 4.0f,3.0f,1.0f };
 	canvas.transform.use();
 	shader.use();
@@ -94,11 +94,15 @@ int test_ray_tracing_main() {
 	shader.setMat4("_projection", perspectiveMat);
 	shader.setMat4("_model", canvas.transform.trans);
 
-	shader.setVec3("_camera.lookFrom", rayCamera.position_);
 	glm::vec3 leftButtom(0.0f), horizontal(0.0f), vertical(0.0f);
-	leftButtom = rayCamera.position_ + rayCamera.forward_- (float)appSize.x / 2 * rayCamera.right_ - (float)appSize.y / 2 * rayCamera.up_;
-	horizontal = (float)appSize.x * rayCamera.right_;
-	vertical = (float)appSize.y * rayCamera.up_;
+	float theta = glm::radians(rayCamera.zoom_);
+	float aspect = (float)appSize.x / (float)appSize.y;
+	float height = 2 * tan(theta / 2);
+	float width = height * aspect;
+	shader.setVec3("_camera.lookFrom", rayCamera.position_);
+	leftButtom = rayCamera.position_ + rayCamera.forward_- width / 2 * rayCamera.right_ - height / 2 * rayCamera.up_;
+	horizontal = width * rayCamera.right_;
+	vertical = height * rayCamera.up_;
 	shader.setVec3("_camera.left_buttom", leftButtom);
 	shader.setVec3("_camera.horizontal", horizontal);
 	shader.setVec3("_camera.vertical", vertical);
@@ -111,9 +115,7 @@ int test_ray_tracing_main() {
 	
 	srand((unsigned int)time(NULL));
 	float randSeed[4];
-	int MinSamplerTimes = 5;
-	int MaxSamplerTimes = 20;
-	int SamplerTimes = MaxSamplerTimes;
+	int SamplerTimes = 3;
 	float sssTime = 0.0f;
 	
 	while (!glfwWindowShouldClose(window)) {
@@ -129,9 +131,7 @@ int test_ray_tracing_main() {
 			//--Raytracing UI
 			ImGui::Text("Camera Position: %.3f, %.3f, %.3f", rayCamera.position_.x,
 				rayCamera.position_.y, rayCamera.position_.z);
-			ImGui::SliderInt("Min Sampler Times", &MinSamplerTimes, 3, 20);
-			ImGui::SliderInt("Max Sampler Times", &MaxSamplerTimes, 20, 40);
-			ImGui::Text(("Sampler Times Per Second: " + std::to_string(SamplerTimes)).c_str());
+			ImGui::SliderInt("Sampler Times Per Second", &SamplerTimes, 3, 40);
 			
 			ImGui::End();
 		}
@@ -142,6 +142,8 @@ int test_ray_tracing_main() {
 		deltaTime_raytracing = currentFrame - lastFrame_raytracing;
 		lastFrame_raytracing = currentFrame;
 
+		glfwGetWindowSize(window, &(appSize.x), &appSize.y);
+
 		processInput_raytracing(window);
 		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -150,17 +152,20 @@ int test_ray_tracing_main() {
 		for (size_t i = 0; i < 4; i++)
 			randSeed[i] = static_cast<float>((rand() % 100)) * 0.01f;
 		shader.use();
-		glfwGetWindowSize(window, &(appSize.x), &appSize.y);
 		shader.setVec2("_screen_size", appSize);
 		shader.setInt("_rdSeed[0]", randSeed[0]);
-		shader.setInt("_rdSeed[0]", randSeed[1]);
-		shader.setInt("_rdSeed[0]", randSeed[2]);
-		shader.setInt("_rdSeed[0]", randSeed[3]);
+		shader.setInt("_rdSeed[1]", randSeed[1]);
+		shader.setInt("_rdSeed[2]", randSeed[2]);
+		shader.setInt("_rdSeed[3]", randSeed[3]);
 		shader.setInt("_maxSampeler", SamplerTimes);
 		shader.setVec3("_camera.lookFrom", rayCamera.position_);
-		leftButtom = rayCamera.position_ + rayCamera.forward_ - (float)appSize.x / 2 * rayCamera.right_ - (float)appSize.y / 2 * rayCamera.up_;
-		horizontal = (float)appSize.x * rayCamera.right_;
-		vertical = (float)appSize.y * rayCamera.up_;
+		theta = glm::radians(rayCamera.zoom_);
+		aspect = (float)appSize.x / (float)appSize.y;
+		height = 2 * tan(theta / 2);
+		width = height * aspect;
+		leftButtom = rayCamera.position_ + rayCamera.forward_ - width / 2 * rayCamera.right_ - height / 2 * rayCamera.up_;
+		horizontal = width * rayCamera.right_;
+		vertical = height * rayCamera.up_;
 		shader.setVec3("_camera.left_buttom", leftButtom);
 		shader.setVec3("_camera.horizontal", horizontal);
 		shader.setVec3("_camera.vertical", vertical);
