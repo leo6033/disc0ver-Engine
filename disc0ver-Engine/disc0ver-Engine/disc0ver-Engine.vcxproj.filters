@@ -87,6 +87,12 @@
     <ClCompile Include="render\mesh.cpp">
       <Filter>源文件\render</Filter>
     </ClCompile>
+    <ClCompile Include="test\test_master.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_rayTracing.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="render\shader.h">
@@ -145,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="render\mesh.h">
       <Filter>头文件\render</Filter>
+    </ClInclude>
+    <ClInclude Include="test\test_total.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
