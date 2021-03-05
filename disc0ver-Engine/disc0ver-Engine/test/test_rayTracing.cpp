@@ -99,10 +99,10 @@ int test_ray_tracing_main() {
 	float aspect = (float)appSize.x / (float)appSize.y;
 	float height = 2 * tan(theta / 2);
 	float width = height * aspect;
-	shader.setVec3("_camera.lookFrom", rayCamera.position_);
 	leftButtom = rayCamera.position_ + rayCamera.forward_- width / 2 * rayCamera.right_ - height / 2 * rayCamera.up_;
 	horizontal = width * rayCamera.right_;
 	vertical = height * rayCamera.up_;
+	shader.setVec3("_camera.lookFrom", rayCamera.position_);
 	shader.setVec3("_camera.left_buttom", leftButtom);
 	shader.setVec3("_camera.horizontal", horizontal);
 	shader.setVec3("_camera.vertical", vertical);
@@ -114,7 +114,7 @@ int test_ray_tracing_main() {
 	glEnable(GL_DEPTH_TEST);
 	
 	srand((unsigned int)time(NULL));
-	float randSeed[4];
+	float rdSeed[4];
 	int SamplerTimes = 3;
 	float sssTime = 0.0f;
 	
@@ -129,8 +129,6 @@ int test_ray_tracing_main() {
 		{
 			ImGui::Begin("Raytracing Properties", &show_demo_window);
 			//--Raytracing UI
-			ImGui::Text("Camera Position: %.3f, %.3f, %.3f", rayCamera.position_.x,
-				rayCamera.position_.y, rayCamera.position_.z);
 			ImGui::SliderInt("Sampler Times Per Second", &SamplerTimes, 3, 40);
 			
 			ImGui::End();
@@ -149,16 +147,12 @@ int test_ray_tracing_main() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		for (size_t i = 0; i < 4; i++)
-			randSeed[i] = static_cast<float>((rand() % 100)) * 0.01f;
 		shader.use();
 		shader.setVec2("_screen_size", appSize);
-		shader.setInt("_rdSeed[0]", randSeed[0]);
-		shader.setInt("_rdSeed[1]", randSeed[1]);
-		shader.setInt("_rdSeed[2]", randSeed[2]);
-		shader.setInt("_rdSeed[3]", randSeed[3]);
+		for (int i = 0; i < 4; i++)rdSeed[i] = static_cast<float>((rand() % 10000)) * 0.0001f;
+		glUniform1fv(glGetUniformLocation(shader.ID, "_rdSeed"), 4, rdSeed);
 		shader.setInt("_maxSampeler", SamplerTimes);
-		shader.setVec3("_camera.lookFrom", rayCamera.position_);
+
 		theta = glm::radians(rayCamera.zoom_);
 		aspect = (float)appSize.x / (float)appSize.y;
 		height = 2 * tan(theta / 2);
@@ -166,6 +160,7 @@ int test_ray_tracing_main() {
 		leftButtom = rayCamera.position_ + rayCamera.forward_ - width / 2 * rayCamera.right_ - height / 2 * rayCamera.up_;
 		horizontal = width * rayCamera.right_;
 		vertical = height * rayCamera.up_;
+		shader.setVec3("_camera.lookFrom", rayCamera.position_);
 		shader.setVec3("_camera.left_buttom", leftButtom);
 		shader.setVec3("_camera.horizontal", horizontal);
 		shader.setVec3("_camera.vertical", vertical);

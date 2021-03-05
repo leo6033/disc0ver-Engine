@@ -28,9 +28,11 @@ int rdCount=0;
 float RandXY(float x, float y){
      return fract(cos(x * (12.9898) + y * (4.1414)) * 43758.5453);
 }
+float texMul;
+float divtexMul;
 float Rand(){
-    float a = RandXY(TexCoord.x, _rdSeed[0]);
-    float b = RandXY(_rdSeed[1], TexCoord.y);
+    float a = RandXY(texMul, _rdSeed[0]);
+    float b = RandXY(_rdSeed[1], divtexMul);
     float c = RandXY(rdCount++, _rdSeed[2]);
     float d = RandXY(_rdSeed[3], a);
     float e = RandXY(b, c);
@@ -377,6 +379,8 @@ vec3 RayTracingFrag()
 
 void main()
 {
+    texMul = TexCoord.x / TexCoord.y;
+    divtexMul = TexCoord.y / TexCoord.x;
     vec3 color;
     color += RayTracingFrag();
     NormalColor(color);
