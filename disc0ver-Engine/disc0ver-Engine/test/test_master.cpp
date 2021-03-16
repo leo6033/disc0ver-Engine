@@ -66,7 +66,7 @@ int test_master_main() {
 	ImGui_ImplOpenGL3_Init("#version 420 core");
 	ImGui::StyleColorsClassic();
 
-	disc0ver::Shader shader("shader/shader_test.vs", "shader/shader_test.fs");
+	disc0ver::Shader shader("shader/light.vs", "shader/light.fs");
 
 	disc0ver::Light light();
 	//disc0ver::rectangleModel rect;

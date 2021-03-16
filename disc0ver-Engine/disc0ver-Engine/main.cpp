@@ -9,6 +9,6 @@
 
 int main()
 {
-	//return test_master_main();
-	return test_ray_tracing_main();
+	return test_master_main();
+	//return test_ray_tracing_main();
 }

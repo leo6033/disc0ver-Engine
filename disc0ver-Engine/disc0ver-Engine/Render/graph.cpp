@@ -181,8 +181,10 @@ void disc0ver::Model::scale()
 	m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));//比较宽缩放倍数 ，记录小的倍数值
 	m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));//比较高缩放倍数 ，记录小的倍数值
 
-	for(int i = 0; i < vertices.size();i ++)
+	for (auto& vertice : vertices)
 	{
-		vertices[i].position *= m_scale;
+		vertice.position *= m_scale;
 	}
+	// you can also set transform.scale
+	// transform.scale = { m_scale, m_scale, m_scale };
 }
