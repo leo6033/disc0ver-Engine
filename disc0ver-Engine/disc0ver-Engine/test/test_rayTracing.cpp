@@ -18,6 +18,7 @@
 #include <algorithm>
 
 #include "../stb_image.h"
+#include <time.h>
 
 const unsigned int SCR_WIDTH_raytracing = 800;
 const unsigned int SCR_HEIGHT_raytracing = 600;
