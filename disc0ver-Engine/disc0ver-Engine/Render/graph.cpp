@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ÍýÏë
+ * @Author: ï¿½ï¿½ï¿½ï¿½
  * @Email: long452a@163.com
  * @Date: 2020-09-27
  */
@@ -121,7 +121,12 @@ void disc0ver::Model::loadModel(const std::string path)
 	std::string tmp_str;
 	infile.open(path);
 
-	// ¶ÁÈ¡Í· solid filename
+	if(!infile.is_open())
+	{
+		throw "model not found";
+	}
+
+	// ï¿½ï¿½È¡Í· solid filename
 	char line[256];
 	infile.getline(line, sizeof(line));
 	std::istringstream solid(line);
@@ -177,9 +182,9 @@ void disc0ver::Model::scale()
 	}
 
 	float  m_scale = 100;
-	m_scale = m_scale < (1.0 / (max_x - min_x)) ? m_scale : (1.0 / (max_x - min_x));//±È½Ï³¤Ëõ·Å±¶Êý £¬¼ÇÂ¼Ð¡µÄ±¶ÊýÖµ
-	m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));//±È½Ï¿íËõ·Å±¶Êý £¬¼ÇÂ¼Ð¡µÄ±¶ÊýÖµ
-	m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));//±È½Ï¸ßËõ·Å±¶Êý £¬¼ÇÂ¼Ð¡µÄ±¶ÊýÖµ
+	m_scale = m_scale < (1.0 / (max_x - min_x)) ? m_scale : (1.0 / (max_x - min_x));//ï¿½È½Ï³ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Â¼Ð¡ï¿½Ä±ï¿½ï¿½ï¿½Öµ
+	m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));//ï¿½È½Ï¿ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Â¼Ð¡ï¿½Ä±ï¿½ï¿½ï¿½Öµ
+	m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));//ï¿½È½Ï¸ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Â¼Ð¡ï¿½Ä±ï¿½ï¿½ï¿½Öµ
 
 	for (auto& vertice : vertices)
 	{

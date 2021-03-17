@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ÍýÏë
+ * @Author: ï¿½ï¿½ï¿½ï¿½
  * @Email: long452a@163.com
  * @Date: 2020-09-27
  */
@@ -25,13 +25,17 @@ namespace disc0ver {
 	class IBaseModel {
 	public:
 		virtual ~IBaseModel() = default;
-		virtual void Init() = 0; // ´´½¨Ä£ÐÍ
+		virtual void Init() = 0; // ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
 		// virtual void resize() = 0; // 
-		virtual void draw(Shader &shader) = 0; // »æÖÆÍ¼ÐÎ
+		virtual void draw(Shader& shader) = 0; // ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
 		virtual void addTexture(std::string textureName, const GLchar* texturePath) = 0;
+		Transform transform;
+		std::string directory;
+		
 	private:
-		const std::vector<Vertex> vertices;
-		const std::vector<unsigned int> indices;
+		std::vector<Mesh> meshes;
+		std::vector<unsigned int> indices;
+		std::vector<Vertex> vertices;
 	};
 
 	class rectangleModel : public IBaseModel {
@@ -42,15 +46,15 @@ namespace disc0ver {
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
-		Transform transform;
+		//Transform transform;
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices = {
-			//     ---- Î»ÖÃ ----       ---- ·¨Ïò ----     - ÎÆÀí×ø±ê -
-			{ 0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f},   // ÓÒÉÏ
-			{ 0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f},   // ÓÒÏÂ
-			{-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f},   // ×óÏÂ
-			{-0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f}    // ×óÉÏ
+			//     ---- Î»ï¿½ï¿½ ----       ---- ï¿½ï¿½ï¿½ï¿½ ----     - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -
+			{ 0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f},   // ï¿½ï¿½ï¿½ï¿½
+			{ 0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f},   // ï¿½ï¿½ï¿½ï¿½
+			{-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f},   // ï¿½ï¿½ï¿½ï¿½
+			{-0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f}    // ï¿½ï¿½ï¿½ï¿½
 		};
 		std::vector<unsigned int> indices = {
 			0, 1, 3,
@@ -58,60 +62,59 @@ namespace disc0ver {
 		};
 	};
 
-	class cubeModel : IBaseModel {
+	class cubeModel : public IBaseModel {
 	public:
 		~cubeModel();
 		void Init() override;
 		// void resize() override;
-		void draw(Shader &shader) override;
+		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
-		Transform transform;
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices = {
-			//     ---- Î»ÖÃ ----       ---- ·¨Ïò ----     - ÎÆÀí×ø±ê -
-			{-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f},
-			{ 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f},
-			{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f},
-			{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f},
-			{-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f},
-			{-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f},
+			//     ---- Î»ï¿½ï¿½ ----       ---- ï¿½ï¿½ï¿½ï¿½ ----     - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -
+			{-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f},
+			{ 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f },
+			{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
+			{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
+			{ -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f },
+			{ -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f },
 
-			{-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  0.0f, 0.0f},
-			{ 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  1.0f, 0.0f},
-			{ 0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  1.0f, 1.0f},
-			{ 0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  1.0f, 1.0f},
-			{-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  0.0f, 1.0f},
-			{-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  0.0f, 0.0f},
+			{ -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  0.0f, 0.0f },
+			{ 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  1.0f, 0.0f },
+			{ 0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  1.0f, 1.0f },
+			{ 0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  1.0f, 1.0f },
+			{ -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  0.0f, 1.0f },
+			{ -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f,  0.0f, 0.0f },
 
-			{-0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,  1.0f, 0.0f},
-			{-0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f,  1.0f, 1.0f},
-			{-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,  0.0f, 1.0f},
-			{-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,  0.0f, 1.0f},
-			{-0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,  0.0f, 0.0f},
-			{-0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,  1.0f, 0.0f},
+			{ -0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,  1.0f, 0.0f },
+			{ -0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
+			{ -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
+			{ -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
+			{ -0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,  0.0f, 0.0f },
+			{ -0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,  1.0f, 0.0f },
 
-			{ 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f},
-			{ 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f},
-			{ 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f},
-			{ 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f},
-			{ 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f},
-			{ 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f},
+			{ 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f },
+			{ 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f },
+			{ 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
+			{ 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f },
+			{ 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f },
+			{ 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f },
 
-			{-0.5f, -0.5f, -0.5f,  0.0f,-1.0f, 0.0f,  0.0f, 1.0f},
-			{ 0.5f, -0.5f, -0.5f,  0.0f,-1.0f, 0.0f,  1.0f, 1.0f},
-			{ 0.5f, -0.5f,  0.5f,  0.0f,-1.0f, 0.0f,  1.0f, 0.0f},
-			{ 0.5f, -0.5f,  0.5f,  0.0f,-1.0f, 0.0f,  1.0f, 0.0f},
-			{-0.5f, -0.5f,  0.5f,  0.0f,-1.0f, 0.0f,  0.0f, 0.0f},
-			{-0.5f, -0.5f, -0.5f,  0.0f,-1.0f, 0.0f,  0.0f, 1.0f},
+			{ -0.5f, -0.5f, -0.5f,  0.0f,-1.0f, 0.0f,  0.0f, 1.0f },
+			{ 0.5f, -0.5f, -0.5f,  0.0f,-1.0f, 0.0f,  1.0f, 1.0f },
+			{ 0.5f, -0.5f,  0.5f,  0.0f,-1.0f, 0.0f,  1.0f, 0.0f },
+			{ 0.5f, -0.5f,  0.5f,  0.0f,-1.0f, 0.0f,  1.0f, 0.0f },
+			{ -0.5f, -0.5f,  0.5f,  0.0f,-1.0f, 0.0f,  0.0f, 0.0f },
+			{ -0.5f, -0.5f, -0.5f,  0.0f,-1.0f, 0.0f,  0.0f, 1.0f },
 
-			{-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f},
-			{ 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f},
-			{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f},
-			{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f},
-			{-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f},
-			{-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f}
+			{ -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f },
+			{ 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f },
+			{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f },
+			{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f },
+			{ -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f },
+			{ -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f }
 
 		};
 		std::vector<unsigned int> indices;
@@ -130,10 +133,10 @@ namespace disc0ver {
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
-		Transform transform;
+		//Transform transform;
 	private:
 		std::vector<Mesh> meshes;
-		std::string directory;
+		//std::string directory;
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 

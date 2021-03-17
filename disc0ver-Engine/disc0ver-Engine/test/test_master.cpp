@@ -70,8 +70,22 @@ int test_master_main() {
 
 	disc0ver::Light light();
 	//disc0ver::rectangleModel rect;
-	disc0ver::cubeModel cube;
-	disc0ver::Model model("leo6033-2020.stl");
+	std::vector<std::shared_ptr<disc0ver::IBaseModel>> models;
+	
+	std::shared_ptr<disc0ver::IBaseModel> cube(new disc0ver::cubeModel());
+	std::shared_ptr<disc0ver::IBaseModel> rect(new disc0ver::rectangleModel());
+	//models.push_back(cube);
+	//models.push_back(rect);
+	//std::cout << models[1]->vertices.size() << std::endl;
+	try
+	{
+		std::shared_ptr<disc0ver::IBaseModel> model(new disc0ver::Model("leo6033-2020.stl"));
+		models.push_back(model);
+	}catch (const char* msg)
+	{
+		std::cerr << msg << std::endl;
+	}
+	
 	//rect.Init();
 	//rect.addTexture("texture1", "wall.jpg");
 	//rect.addTexture("texture2", "awesomeface.png");
@@ -80,7 +94,11 @@ int test_master_main() {
 	cube.addTexture("texture1", "wall.jpg");
 	cube.addTexture("texture2", "awesomeface.png");*/
 
-	model.Init();
+	for(auto& model : models)
+	{
+		model->Init();
+	}
+	
 
 	shader.use();
 
@@ -126,9 +144,13 @@ int test_master_main() {
 		//cube.transform.position.y = -0.5f;
 		//cube.transform.rotation.z = (float)glfwGetTime();
 
-		model.transform.position.y = -0.5f;
-		model.transform.rotation.z = (float)glfwGetTime();
-		model.transform.rotation.x = -90;
+		for(auto& model : models)
+		{
+			model->transform.position.y = -0.5f;
+			model->transform.rotation.z = (float)glfwGetTime();
+			model->transform.rotation.x = -90;
+		}
+		
 
 		shader.use();
 
@@ -141,11 +163,14 @@ int test_master_main() {
 		unsigned int transformLoc = glGetUniformLocation(shader.ID, "model");
 		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(rect.transform.trans));
 		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(cube.transform.trans));
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model.transform.trans));
 
 		//rect.draw(shader);
 		//cube.draw(shader);
-		model.draw(shader);
+		for (auto& model : models)
+		{
+			glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model->transform.trans));
+			model->draw(shader);
+		}
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
