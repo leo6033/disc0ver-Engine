@@ -40,6 +40,12 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{a92d0f47-ce15-4730-8172-9afafa9db6fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\util">
+      <UniqueIdentifier>{cae98c51-d07e-48f5-ab5d-7f9c0d6e0b67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\util">
+      <UniqueIdentifier>{3a8b9367-fb50-4302-b06c-028123339852}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="test\test_rayTracing.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="util\OBJLoader.cpp">
+      <Filter>源文件\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="test\test_total.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="util\OBJLoader.h">
+      <Filter>头文件\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

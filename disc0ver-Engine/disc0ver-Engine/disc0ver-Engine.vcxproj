@@ -163,6 +163,7 @@
     <ClCompile Include="render\transform.cpp" />
     <ClCompile Include="test\test_master.cpp" />
     <ClCompile Include="test\test_rayTracing.cpp" />
+    <ClCompile Include="util\OBJLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\light\light.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\transform.h" />
     <ClInclude Include="test\test_total.h" />
+    <ClInclude Include="util\OBJLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
