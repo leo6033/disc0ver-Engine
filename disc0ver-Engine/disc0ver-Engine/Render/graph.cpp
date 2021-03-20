@@ -342,13 +342,18 @@ void disc0ver::Model::scale()
 
 void disc0ver::Model::createMesh(std::string materialName, std::vector<Material>& materials)
 {
+	int start = 0;
+	for(auto mesh: meshes)
+	{
+		start += mesh.indices.size();
+	}
 	std::vector<Texture> tmp;
 	for (auto it = textures.begin(); it != textures.end(); ++it)
 	{
 		tmp.push_back(it->second);
 	}
 
-	for (int i = 0; i < vertices.size(); i++)
+	for (int i = start; i < vertices.size(); i++)
 	{
 		indices.push_back(i);
 	}
@@ -366,7 +371,6 @@ void disc0ver::Model::createMesh(std::string materialName, std::vector<Material>
 		}
 	}
 	meshes.push_back(mesh);
-	//vertices.clear();
 	indices.clear();
 }
 
