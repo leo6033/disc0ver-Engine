@@ -114,10 +114,10 @@ namespace disc0ver {
 		std::vector<unsigned int> indices;
 	};
 
-	class Model: public IBaseModel
+	class STLModel: public IBaseModel
 	{
 	public:
-		Model(const char* path)
+		STLModel(const char* path)
 		{
 			loadModel(path);
 			scale();
@@ -137,5 +137,32 @@ namespace disc0ver {
 		void loadModel(const std::string path);
 		void scale();
 	};
+
+	class Model: public IBaseModel
+	{
+	public:
+		Model(const char* path)
+		{
+			loadModel(path);
+			scale();
+		}
+		void Init() override;
+		void draw(Shader& shader) override;
+		void addTexture(std::string textureName, const GLchar* texturePath) override;
+		std::map<std::string, Texture> textures;
+		//Transform transform;
+	private:
+		std::vector<Mesh> meshes;
+		//std::string directory;
+		std::vector<Vertex> vertices;
+		std::vector<unsigned int> indices;
+
+		void loadModel(const std::string path);
+		void scale();
+		void createMesh(std::string materialName, std::vector<Material>& materials);
+		void loadMaterial(std::vector<Material> &materials, std::string path);
+		
+	};
+
 }
 #endif
