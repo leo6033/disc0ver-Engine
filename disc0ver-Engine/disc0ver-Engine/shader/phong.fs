@@ -29,14 +29,13 @@ void main(void) {
   vec3 lightDir = normalize(lightPos - FragPos);
   vec3 normal = normalize(Normal);
   float diff = max(dot(lightDir, normal), 0.0);
-  // float light_atten_coff = uLightIntensity / length(lightPos - FragPos);
-  vec3 diffuse =  diff * color;
+  float light_atten_coff = 100.0 / length(lightPos - FragPos);
+  vec3 diffuse =  diff * color * light_atten_coff;
 
   vec3 viewDir = normalize(viewPos - FragPos);
   vec3 reflectDir = reflect(-lightDir, normal);
   float spec = pow (max(dot(viewDir, reflectDir), 0.0), 35.0);
-  vec3 specular = lightColor * spec;  
+  vec3 specular = lightColor * spec * light_atten_coff;  
   
-  gl_FragColor = vec4(pow((ambient + diffuse + specular), vec3(1.0/2.2)), 1.0);
-
+  FragColor = vec4(pow((ambient + diffuse + specular), vec3(1.0/2.2)), 1.0);
 }
