@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ÍýÏë
+ * @Author: å¦„æƒ³
  * @Email: long452a@163.com
  * @Date: 2020-10-07
  */
@@ -37,17 +37,17 @@ namespace disc0ver {
 
 	class IBaseCamera {
 	public:
-		// Ïà»úÊôÐÔ
+		// ç›¸æœºå±žæ€§
 		glm::vec3 position_;
 		glm::vec3 forward_;
 		glm::vec3 up_;
 		glm::vec3 right_;
 		glm::vec3 world_up_;
-		// Å·À­½Ç
+		// æ¬§æ‹‰è§’
 		float yaw_;
 		float pitch_;
 		float roll_;
-		// Ïà»úÑ¡Ïî
+		// ç›¸æœºé€‰é¡¹
 		float movement_speed_;
 		float mouse_sensitivity_;
 		float zoom_;
