@@ -107,6 +107,7 @@ int test_master_main() {
 	shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
 	bool show_demo_window = true;
+	int width, height;
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -154,14 +155,14 @@ int test_master_main() {
 		
 
 		shader.use();
-
-		glm::mat4 projection = glm::perspective(glm::radians(camera.zoom_), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glfwGetFramebufferSize(window, &width, &height);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.zoom_), (float)width / (float)height, 0.1f, 100.0f);
 		shader.setMat4("projection", projection);
 
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("view", view);
 		shader.setVec3("viewPos", camera.position_);
-		shader.setVec3("lightPos", 1.2f, 1.0f, 2.0f);
+		shader.setVec3("lightPos", std::sin((float)glfwGetTime() * 6) * 100.0f, std::cos((float)glfwGetTime() * 4) * 150.0f, std::cos((float)glfwGetTime() * 2) * 100.0f);
 		unsigned int transformLoc = glGetUniformLocation(shader.ID, "model");
 		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(rect.transform.trans));
 		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(cube.transform.trans));
