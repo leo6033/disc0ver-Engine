@@ -30,12 +30,6 @@ namespace disc0ver {
 		virtual void draw(Shader& shader) = 0; // ����ͼ��
 		virtual void addTexture(std::string textureName, const GLchar* texturePath) = 0;
 		Transform transform;
-		std::string directory;
-		
-	private:
-		std::vector<Mesh> meshes;
-		std::vector<unsigned int> indices;
-		std::vector<Vertex> vertices;
 	};
 
 	class rectangleModel : public IBaseModel {
