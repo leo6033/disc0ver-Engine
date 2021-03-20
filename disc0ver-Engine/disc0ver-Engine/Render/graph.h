@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ����
+ * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-09-27
  */
@@ -25,9 +25,9 @@ namespace disc0ver {
 	class IBaseModel {
 	public:
 		virtual ~IBaseModel() = default;
-		virtual void Init() = 0; // ����ģ��
+		virtual void Init() = 0; // 创建模型
 		// virtual void resize() = 0; // 
-		virtual void draw(Shader& shader) = 0; // ����ͼ��
+		virtual void draw(Shader& shader) = 0; // 绘制图形
 		virtual void addTexture(std::string textureName, const GLchar* texturePath) = 0;
 		Transform transform;
 	};
@@ -44,11 +44,11 @@ namespace disc0ver {
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices = {
-			//     ---- λ�� ----       ---- ���� ----     - �������� -
-			{ 0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f},   // ����
-			{ 0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f},   // ����
-			{-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f},   // ����
-			{-0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f}    // ����
+			//     ---- 位置 ----       ---- 法向 ----     - 纹理坐标 -
+			{ 0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f},   // 右上
+			{ 0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f},   // 右下
+			{-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f},   // 左下
+			{-0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f}    // 左上
 		};
 		std::vector<unsigned int> indices = {
 			0, 1, 3,
@@ -67,7 +67,7 @@ namespace disc0ver {
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices = {
-			//     ---- λ�� ----       ---- ���� ----     - �������� -
+			//     ---- 位置 ----       ---- 法向 ----     - 纹理坐标 -
 			{-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f},
 			{ 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f },
 			{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  1.0f, 1.0f },
