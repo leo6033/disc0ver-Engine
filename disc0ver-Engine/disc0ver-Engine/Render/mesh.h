@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: 妄想
+ * @Author: 濡勬兂
  * @Email: long452a@163.com
  * @Date: 2021-2-20
  */
@@ -8,6 +8,7 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include <utility>
 #include<vector>
 
 #include "texture.h"
@@ -17,29 +18,34 @@
 
 namespace disc0ver
 {
-	// 顶点
+	// 椤剁偣
 	struct Vertex {
-		Position position;	// 坐标
-		vec3<TRANSFORM> normal;	// 顶点法向
+		Position position;	// 鍧愭爣
+		vec3<TRANSFORM> normal;	// 椤剁偣娉曞悜
 		glm::vec2 texCoords;
 
 		Vertex() = default;
 		Vertex(float x, float y, float z, float n1, float n2, float n3, float u, float v) : position(x, y, z), normal(n1, n2, n3), texCoords(u, v) {}
+		Vertex(vec3<TRANSFORM> v, vec3<TRANSFORM> vn, glm::vec2 vt): position(v), normal(vn), texCoords(vt) {}
 	};
 	
 	class Mesh
 	{
     public:
-        /*  网格数据  */
+        /*  缃戞牸鏁版嵁  */
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
         std::vector<Texture> textures;
 
         Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
         void Draw(Shader &shader);
+		void addMaterial(Material material);
     private:
-        /*  渲染数据  */
+        /*  娓叉煋鏁版嵁  */
         unsigned int VAO, VBO, EBO;
+		/* 鏉愯川 */
+		Material material;
+		bool useMaterial = false;
 
         void setupMesh();
 	};
