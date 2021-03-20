@@ -1,16 +1,18 @@
 #include "mesh.h"
+
+#include <utility>
 /*
  * @Description:
- * @Author: Õ˝œÎ
+ * @Author: Â¶ÑÊÉ≥
  * @Email: long452a@163.com
  * @Date: 2021-2-20
  */
 
 disc0ver::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
 {
-	this->vertices = vertices;
-	this->indices = indices;
-	this->textures = textures;
+	this->vertices = std::move(vertices);
+	this->indices = std::move(indices);
+	this->textures = std::move(textures);
 
 	setupMesh();
 }
@@ -19,8 +21,15 @@ void disc0ver::Mesh::Draw(Shader &shader)
 {
 	for(unsigned int i = 0; i < textures.size(); i ++)
 	{
+        shader.setInt("uTextureSample", 1);
         textures[i].use(i);
         shader.setInt(textures[i].getName(), static_cast<int>(i));
+	}
+
+	if(useMaterial)
+	{
+        shader.setVec3("uKd", material.Kd);
+        shader.setVec3("uKs", material.Ks);
 	}
 	
     glBindVertexArray(VAO);
@@ -46,15 +55,26 @@ void disc0ver::Mesh::setupMesh()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
         &indices[0], GL_STATIC_DRAW);
 
-    // ∂•µ„Œª÷√
+    // È°∂ÁÇπ‰ΩçÁΩÆ
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<void*>(0));
-    // ∂•µ„∑®œﬂ
+    // È°∂ÁÇπÊ≥ïÁ∫ø
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, normal)));
-    // ∂•µ„Œ∆¿Ì◊¯±Í
+    // È°∂ÁÇπÁ∫πÁêÜÂùêÊ†á
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texCoords)));
 
     glBindVertexArray(0);
+}
+
+void disc0ver::Mesh::addMaterial(Material material)
+{
+    this->material = std::move(material);
+    useMaterial = true;
+	if(!this->material.map_Kd.empty())
+	{
+        Texture texture("texture1", this->material.map_Kd.c_str());
+        textures.push_back(texture);
+	}
 }

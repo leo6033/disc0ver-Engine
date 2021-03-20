@@ -66,7 +66,7 @@ int test_master_main() {
 	ImGui_ImplOpenGL3_Init("#version 420 core");
 	ImGui::StyleColorsClassic();
 
-	disc0ver::Shader shader("shader/light.vs", "shader/light.fs");
+	disc0ver::Shader shader("shader/phong.vs", "shader/phong.fs");
 
 	disc0ver::Light light();
 	//disc0ver::rectangleModel rect;
@@ -79,7 +79,8 @@ int test_master_main() {
 	//std::cout << models[1]->vertices.size() << std::endl;
 	try
 	{
-		std::shared_ptr<disc0ver::IBaseModel> model(new disc0ver::Model("leo6033-2020.stl"));
+		//std::shared_ptr<disc0ver::IBaseModel> model(new disc0ver::STLModel("leo6033-2020.stl"));
+		std::shared_ptr<disc0ver::IBaseModel> model(new disc0ver::Model("models/Marry.obj"));
 		models.push_back(model);
 	}catch (const char* msg)
 	{
@@ -147,8 +148,8 @@ int test_master_main() {
 		for(auto& model : models)
 		{
 			model->transform.position.y = -0.5f;
-			model->transform.rotation.z = (float)glfwGetTime();
-			model->transform.rotation.x = -90;
+			//model->transform.rotation.z = (float)glfwGetTime();
+			//model->transform.rotation.x = -90;
 		}
 		
 
@@ -159,7 +160,8 @@ int test_master_main() {
 
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("view", view);
-
+		shader.setVec3("viewPos", camera.position_);
+		shader.setVec3("lightPos", 1.2f, 1.0f, 2.0f);
 		unsigned int transformLoc = glGetUniformLocation(shader.ID, "model");
 		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(rect.transform.trans));
 		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(cube.transform.trans));
