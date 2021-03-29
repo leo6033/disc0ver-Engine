@@ -20,9 +20,9 @@ namespace disc0ver
 {
 	// 顶点
 	struct Vertex {
-		Position position;	// 坐标
+		Position position;	// 顶点位置
 		vec3<TRANSFORM> normal;	// 顶点法向
-		glm::vec2 texCoords;
+		glm::vec2 texCoords;	// 纹理
 
 		Vertex() = default;
 		Vertex(float x, float y, float z, float n1, float n2, float n3, float u, float v) : position(x, y, z), normal(n1, n2, n3), texCoords(u, v) {}
@@ -32,7 +32,7 @@ namespace disc0ver
 	class Mesh
 	{
     public:
-        /*  网格数据  */
+        /*  网格数据: 顶点数据 索引数据(用于索引绘制) 纹理数据*/
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
         std::vector<Texture> textures;
@@ -41,7 +41,7 @@ namespace disc0ver
         void Draw(Shader &shader);
 		void addMaterial(Material material);
     private:
-        /*  渲染数据  */
+        /*  顶点数组对象 顶点缓冲对象 索引缓冲对象  */
         unsigned int VAO, VBO, EBO;
 		/* 材质 */
 		Material material;

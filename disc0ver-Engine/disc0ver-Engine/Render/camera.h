@@ -52,7 +52,7 @@ namespace disc0ver {
 		float yaw_;
 		float pitch_;
 		float roll_;
-		// 相机选项
+		// 移动速度 转向敏感度 fov
 		float movement_speed_;
 		float mouse_sensitivity_;
 		float zoom_;
@@ -61,9 +61,13 @@ namespace disc0ver {
 		IBaseCamera(): forward_(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed_(SPEED),
 			mouse_sensitivity_(SENSITIVITY), zoom_(ZOOM) {}
 
+		// 得到view矩阵
 		glm::mat4 GetViewMatrix() const;
+		// 处理键盘输入—WASD控制相机移动
 		virtual void ProcessKeyboard() {}
+		// 处理鼠标输入—控制相机转向
 		virtual void ProcessMouseMovement() {}
+		// 处理滚轮输入—放大/缩小
 		virtual void ProcessMouseScroll() {}
 	protected:
 		void UpdateCameraVectors();

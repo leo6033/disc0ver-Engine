@@ -53,13 +53,13 @@ disc0ver::Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 }
 
 void disc0ver::Shader::use() {
-	/*激活程序对象*/
+	/* 激活程序对象 */
 	glUseProgram(ID);
 }
 
 void disc0ver::Shader::read(const GLchar* path, std::ifstream& shaderFile, std::string& code) const
 {
-	/*读取着色器文件*/
+	/* 读取着色器文件 */
 	shaderFile.open(path);
 	std::stringstream shaderStream;
 	shaderStream << shaderFile.rdbuf();
@@ -68,7 +68,7 @@ void disc0ver::Shader::read(const GLchar* path, std::ifstream& shaderFile, std::
 }
 
 void disc0ver::Shader::errorCheck(unsigned int shader, std::string type) const {
-	/*判断是否有编译、连接错误*/
+	/* 判断是否有编译、连接错误 */
 	int success;
 	char infoLog[512];
 	if (type == "PROGRAM") {
