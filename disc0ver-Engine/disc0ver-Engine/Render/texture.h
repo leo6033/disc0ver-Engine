@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ÍıÏë
+ * @Author: å¦„æƒ³
  * @Email: long452a@163.com
  * @Date: 2020-09-30
  */
@@ -16,6 +16,7 @@
 
 namespace disc0ver {
 	class Texture {
+		/*çº¹ç†å¯¹è±¡*/
 	public:
 		unsigned int texture;
 		Texture() {}

@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ����
+ * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-09-24
  */
@@ -8,6 +8,11 @@
 #include "shader.h"
 
 disc0ver::Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
+	/*
+	着色器程序构造函数 
+	参数一：顶点着色器代码文件路径
+	参数二：片段着色器代码文件路径
+	*/
 	std::string vertexCode, fragmentCode;
 	std::ifstream vShaderFile, fShaderFile;
 	vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -26,7 +31,7 @@ disc0ver::Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 
 	unsigned int vertexShader, fragmentShader;
 
-	// ���� Shader
+	// 编译 Shader
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vShaderCode, NULL);
 	glCompileShader(vertexShader);
@@ -37,7 +42,7 @@ disc0ver::Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 	glCompileShader(fragmentShader);
 	errorCheck(fragmentShader, "FRAGMENT");
 
-	// ����
+	// 链接
 	ID = glCreateProgram();
 	glAttachShader(ID, vertexShader);
 	glAttachShader(ID, fragmentShader);
@@ -48,11 +53,13 @@ disc0ver::Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 }
 
 void disc0ver::Shader::use() {
+	/*激活程序对象*/
 	glUseProgram(ID);
 }
 
 void disc0ver::Shader::read(const GLchar* path, std::ifstream& shaderFile, std::string& code) const
 {
+	/*读取着色器文件*/
 	shaderFile.open(path);
 	std::stringstream shaderStream;
 	shaderStream << shaderFile.rdbuf();
@@ -61,6 +68,7 @@ void disc0ver::Shader::read(const GLchar* path, std::ifstream& shaderFile, std::
 }
 
 void disc0ver::Shader::errorCheck(unsigned int shader, std::string type) const {
+	/*判断是否有编译、连接错误*/
 	int success;
 	char infoLog[512];
 	if (type == "PROGRAM") {

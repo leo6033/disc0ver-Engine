@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ����
+ * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-10-07
  */
@@ -13,11 +13,16 @@
 
 #endif // !CAMERA_H
 
+/*得到view矩阵*/
 glm::mat4 disc0ver::IBaseCamera::GetViewMatrix() const
 {
+	//参数一 摄像机位置
+	//参数二 目标位置 此处定义为摄像机位置+朝向位置 因此无论怎么更改摄像机位置 朝向位置不会变
+	//参数三 世界向上向量
 	return glm::lookAt(position_, position_ + forward_, world_up_);
 }
 
+/*更新相机的坐标系*/
 void disc0ver::IBaseCamera::UpdateCameraVectors()
 {
 	glm::vec3 front;
@@ -49,6 +54,7 @@ disc0ver::FPSCamera::FPSCamera(float pos_x, float pos_y, float pos_z, float up_x
 	UpdateCameraVectors();
 }
 
+/*处理键盘输入 WASD控制相机移动*/
 void disc0ver::FPSCamera::ProcessKeyboard(CameraMovement direction, float deltaTime)
 {
 	float velocity = movement_speed_ * deltaTime;
@@ -62,6 +68,7 @@ void disc0ver::FPSCamera::ProcessKeyboard(CameraMovement direction, float deltaT
 		position_ += right_ * velocity;
 }
 
+/*处理鼠标输入*/
 void disc0ver::FPSCamera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
 {
 	xoffset *= mouse_sensitivity_;
@@ -78,6 +85,7 @@ void disc0ver::FPSCamera::ProcessMouseMovement(float xoffset, float yoffset, GLb
 	UpdateCameraVectors();
 }
 
+/*处理滚轮输入 控制相机fov*/
 void disc0ver::FPSCamera::ProcessMouseScroll(float yoffset)
 {
 	zoom_ -= yoffset;

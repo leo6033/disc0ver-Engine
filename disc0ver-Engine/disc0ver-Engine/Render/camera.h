@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ÍıÏë
+ * @Author: å¦„æƒ³
  * @Email: long452a@163.com
  * @Date: 2020-10-07
  */
@@ -29,25 +29,30 @@ namespace disc0ver {
 		ORTHO
 	};
 
+	//æ¬§æ‹‰è§’-åè½¬è§’ 
 	const float YAW = -90.0f;
+	//æ¬§æ‹‰è§’-ä¿¯ä»°è§’
 	const float PITCH = 0.0f;
+	//ç›¸æœºç§»åŠ¨é€Ÿåº¦
 	const float SPEED = 2.5f;
+	//è½¬å‘æ•æ„Ÿåº¦
 	const float SENSITIVITY = 0.1f;
+	//fov
 	const float ZOOM = 45.0f;
 
 	class IBaseCamera {
 	public:
-		// Ïà»úÊôĞÔ
+		// ç›¸æœºå±æ€§
 		glm::vec3 position_;
 		glm::vec3 forward_;
 		glm::vec3 up_;
 		glm::vec3 right_;
 		glm::vec3 world_up_;
-		// Å·À­½Ç
+		// æ¬§æ‹‰è§’
 		float yaw_;
 		float pitch_;
 		float roll_;
-		// Ïà»úÑ¡Ïî
+		// ç›¸æœºé€‰é¡¹
 		float movement_speed_;
 		float mouse_sensitivity_;
 		float zoom_;
