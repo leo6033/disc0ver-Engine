@@ -18,6 +18,7 @@
 
 namespace disc0ver {
 	class Texture {
+		/*纹理对象*/
 	public:
 		unsigned int texture;
 		Texture() {}

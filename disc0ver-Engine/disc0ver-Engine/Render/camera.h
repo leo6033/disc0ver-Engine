@@ -29,10 +29,15 @@ namespace disc0ver {
 		ORTHO
 	};
 
+	//欧拉角-偏转角 
 	const float YAW = -90.0f;
+	//欧拉角-俯仰角
 	const float PITCH = 0.0f;
+	//相机移动速度
 	const float SPEED = 2.5f;
+	//转向敏感度
 	const float SENSITIVITY = 0.1f;
+	//fov
 	const float ZOOM = 45.0f;
 
 	class IBaseCamera {

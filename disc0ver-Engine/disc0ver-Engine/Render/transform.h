@@ -25,6 +25,7 @@ namespace disc0ver {
 		glm::mat4 trans;
 		void use();
 	//private:
+		//旋转 平移 缩放矩阵
 		Rotation rotation = { 0.0f, 0.0f, 0.0f };
 		Position position = { 0.0f, 0.0f, 0.0f };
 		Scale scale = { 1.0f, 1.0f, 1.0f };

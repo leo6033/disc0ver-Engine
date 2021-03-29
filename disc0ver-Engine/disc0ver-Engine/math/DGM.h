@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ����
+ * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-11-02
  */
@@ -15,13 +15,18 @@
 #include <iostream>
 
 namespace disc0ver {
+	/*
+		 枚举类型
+		 transform代表变换 使用x、y、z获取成员
+		 rgb代表颜色 使用r、g、b获取成员
+	*/
 	enum TYPE
 	{
 		TRANSFORM,
 		RGB
 	};
 
-	// TODO: ��ʱʵ�� vec3�����濼�ǲ��� C++ 11 �Ժ�����Խ�����д
+	// TODO: 暂时实现 vec3，后面考虑采用 C++ 11 以后的特性进行重写
 	template<TYPE T>
 	class vec3 {
 	public:
@@ -29,13 +34,15 @@ namespace disc0ver {
 		vec3(float e0, float e1, float e2) { e[0] = e0; e[1] = e1; e[2] = e2; }
 
 		
-		inline float get_x() { static_assert(T == TRANSFORM, "RGB has no contribute x, please use r"); return e[0]; }
+		// get
+		inline float get_x() { static_assert(T == TRANSFORM, "RGB has no contribute x, please use r"); return e[0] ; }
 		inline float get_y() { static_assert(T == TRANSFORM, "RGB has no contribute y, please use g"); return e[1]; }
 		inline float get_z() { static_assert(T == TRANSFORM, "RGB has no contribute z, please use b"); return e[2]; }
 		inline float get_r() { static_assert(T == RGB, "TRANSFORM has no contribute r, please use x"); return e[0]; }
 		inline float get_g() { static_assert(T == RGB, "TRANSFORM has no contribute g, please use y"); return e[1]; }
 		inline float get_b() { static_assert(T == RGB, "TRANSFORM has no contribute b, please use z"); return e[2]; }
 
+		// set-[
 		inline void set_x(float value) { static_assert(T == TRANSFORM, "RGB has no contribute x, please use r"); e[0] = value; }
 		inline void set_y(float value) { static_assert(T == TRANSFORM, "RGB has no contribute y, please use g"); e[1] = value; }
 		inline void set_z(float value) { static_assert(T == TRANSFORM, "RGB has no contribute z, please use b"); e[2] = value; }
@@ -60,6 +67,9 @@ namespace disc0ver {
 		inline void normalize();
 		
 		float e[3];
+		/*
+			设置属性 可以通过.x .y .z 或者 .r .g .b的形式访问/修改成员
+		*/
 		__declspec(property(get = get_x, put = set_x)) float x;
 		__declspec(property(get = get_y, put = set_y)) float y;
 		__declspec(property(get = get_z, put = set_z)) float z;
