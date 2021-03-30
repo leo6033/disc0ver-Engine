@@ -99,9 +99,6 @@
     <ClCompile Include="test\test_rayTracing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="util\OBJLoader.cpp">
-      <Filter>源文件\util</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="render\shader.h">
@@ -163,9 +160,6 @@
     </ClInclude>
     <ClInclude Include="test\test_total.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="util\OBJLoader.h">
-      <Filter>头文件\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
