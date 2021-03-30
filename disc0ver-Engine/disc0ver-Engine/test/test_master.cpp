@@ -19,27 +19,38 @@
 
 #include "../stb_image.h"
 
+//窗口回调函数
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+//鼠标按键回调(左右键点击)
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+//鼠标回调(移动)
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_callback1(GLFWwindow* window, double xpos, double ypos);
+//鼠标滚轮回调
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+//处理用户输入 WASD ESC
 void processInput(GLFWwindow* window);
 
+//窗口初始大小
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+//FPS相机
 disc0ver::FPSCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
+//记录鼠标坐标
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
+//记录时间帧间隔
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 int test_master_main() {
+	//glfw初始化
 	glfwInit();
+	//创建窗口
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "disc0ver", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Fail to create window" << std::endl;
@@ -48,6 +59,7 @@ int test_master_main() {
 	}
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
+	//设置回调函数
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	//glfwSetCursorPosCallback(window, mouse_callback);
@@ -58,6 +70,7 @@ int test_master_main() {
 		return -1;
 	}
 
+	//开启深度测试
 	glEnable(GL_DEPTH_TEST);
 
 	ImGui::CreateContext();
@@ -135,6 +148,7 @@ int test_master_main() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		// 处理用户输入
 		processInput(window);
 
 		//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

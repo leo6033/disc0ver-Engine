@@ -15,6 +15,7 @@ disc0ver::rectangleModel::~rectangleModel()
 }
 
 void disc0ver::rectangleModel::Init() {
+	/* 矩形模型——初始化 */
 	std::vector<Texture> tmp;
 	for (auto it = textures.begin(); it != textures.end(); ++it)
 	{
@@ -30,6 +31,7 @@ void disc0ver::rectangleModel::Init() {
 
 void disc0ver::rectangleModel::draw(Shader &shader)
 {
+	/* 矩形模型——绘制 */
 	transform.use();
 	for (int i = 0; i < meshes.size(); i++)
 	{
@@ -39,6 +41,7 @@ void disc0ver::rectangleModel::draw(Shader &shader)
 
 void disc0ver::rectangleModel::addTexture(std::string textureName, const GLchar* texturePath)
 {
+	/* 矩形模型——添加纹理 */
 	Texture texture(textureName, texturePath);
 	textures[textureName] = texture;
 	meshes[0].textures.push_back(texture);
@@ -50,6 +53,7 @@ disc0ver::cubeModel::~cubeModel()
 
 void disc0ver::cubeModel::Init()
 {
+	/* 立方体模型——初始化 */
 	std::vector<Texture> tmp;
 	for(auto it = textures.begin();it !=textures.end();++it)
 	{
@@ -69,6 +73,7 @@ void disc0ver::cubeModel::Init()
 
 void disc0ver::cubeModel::draw(Shader &shader)
 {
+	/* 立方体模型——绘制 */
 	transform.use();
 	for (auto& mesh : meshes)
 	{
@@ -78,6 +83,7 @@ void disc0ver::cubeModel::draw(Shader &shader)
 
 void disc0ver::cubeModel::addTexture(std::string textureName, const GLchar* texturePath)
 {
+	/* 立方体模型——添加纹理 */
 	Texture texture(textureName, texturePath);
 	textures[textureName] = texture;
 	meshes[0].textures.push_back(texture);

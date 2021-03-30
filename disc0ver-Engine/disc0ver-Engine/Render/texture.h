@@ -18,6 +18,7 @@
 
 namespace disc0ver {
 	class Texture {
+		/*纹理对象*/
 	public:
 		unsigned int texture;
 		Texture() {}
@@ -30,6 +31,7 @@ namespace disc0ver {
 
 	class Material
 	{
+		/* 材质 */
 	public:
 		Material()
 		{
@@ -40,15 +42,15 @@ namespace disc0ver {
 			illum = 0;
 		}
 
-		// Material Name
+		// Material Name - 名称
 		std::string name;
-		// Ambient Color
+		// Ambient Color - 环境光
 		glm::vec3 Ka;
-		// Diffuse Color
+		// Diffuse Color - 漫反射
 		glm::vec3 Kd;
-		// Specular Color
+		// Specular Color - 镜面光
 		glm::vec3 Ks;
-		// Specular Exponent
+		// Specular Exponent - 镜面光反光度
 		float Ns;
 		// Optical Density
 		float Ni;
@@ -56,17 +58,17 @@ namespace disc0ver {
 		float d;
 		// Illumination
 		int illum;
-		// Ambient Texture Map
+		// Ambient Texture Map - 环境光贴图
 		std::string map_Ka;
-		// Diffuse Texture Map
+		// Diffuse Texture Map - 漫反射贴图
 		std::string map_Kd;
-		// Specular Texture Map
+		// Specular Texture Map - 镜面光贴图
 		std::string map_Ks;
-		// Specular Hightlight Map
+		// Specular Hightlight Map - 镜面光高光贴图
 		std::string map_Ns;
 		// Alpha Texture Map
 		std::string map_d;
-		// Bump Map
+		// Bump Map	- 凹凸贴图
 		std::string map_bump;
 	};
 }

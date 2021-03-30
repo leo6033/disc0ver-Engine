@@ -19,6 +19,7 @@ disc0ver::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> ind
 
 void disc0ver::Mesh::Draw(Shader &shader)
 {
+    /* 绘制网格 */
 	for(unsigned int i = 0; i < textures.size(); i ++)
 	{
         shader.setInt("uTextureSample", 1);
@@ -42,6 +43,7 @@ void disc0ver::Mesh::Draw(Shader &shader)
 
 void disc0ver::Mesh::setupMesh()
 {
+    // 初始化VAO VBO EBO对象
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -70,6 +72,7 @@ void disc0ver::Mesh::setupMesh()
 
 void disc0ver::Mesh::addMaterial(Material material)
 {
+    /* 添加材质 */
     this->material = std::move(material);
     useMaterial = true;
 	if(!this->material.map_Kd.empty())

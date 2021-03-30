@@ -1,6 +1,6 @@
 /*
  * @Description:
- * @Author: ����
+ * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-09-30
  */
@@ -18,10 +18,15 @@
 
 disc0ver::Texture::Texture(std::string textureName, const GLchar* texturePath)
 {
+	/*
+	构造函数
+	参数一：该纹理的名称
+	参数二：该纹理对应图片的路径
+	*/
 	this->textureName = std::move(textureName);
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	// Ϊ��ǰ�󶨵������������û��ơ����˷�ʽ
+	// 为当前绑定的纹理对象设置环绕、过滤方式
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -64,6 +69,9 @@ disc0ver::Texture::Texture(std::string textureName, const GLchar* texturePath)
 
 void disc0ver::Texture::use(unsigned int ID)
 {
+	/*
+	激活参数ID所对应的纹理单元 并把该纹理对象绑定到上面
+	*/
 	glActiveTexture(GL_TEXTURE0 + ID);
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
