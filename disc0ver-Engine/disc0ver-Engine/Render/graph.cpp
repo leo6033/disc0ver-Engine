@@ -16,12 +16,7 @@ disc0ver::rectangleModel::~rectangleModel()
 
 void disc0ver::rectangleModel::Init() {
 	/* 矩形模型——初始化 */
-	std::vector<Texture> tmp;
-	for (auto it = textures.begin(); it != textures.end(); ++it)
-	{
-		tmp.push_back(it->second);
-	}
-	Mesh mesh(vertices, indices, tmp);
+	Mesh mesh(vertices, indices, std::vector<Texture>());
 	meshes.push_back(mesh);
 }
 
@@ -54,16 +49,11 @@ disc0ver::cubeModel::~cubeModel()
 void disc0ver::cubeModel::Init()
 {
 	/* 立方体模型——初始化 */
-	std::vector<Texture> tmp;
-	for(auto it = textures.begin();it !=textures.end();++it)
-	{
-		tmp.push_back(it->second);
-	}
 	for(int i = 0; i < vertices.size(); i ++)
 	{
 		indices.push_back(i);
 	}
-	Mesh mesh(vertices, indices, tmp);
+	Mesh mesh(vertices, indices, std::vector<Texture>());
 	meshes.push_back(mesh);
 }
 
