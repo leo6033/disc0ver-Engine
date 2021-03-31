@@ -81,6 +81,7 @@ void disc0ver::cubeModel::addTexture(std::string textureName, const GLchar* text
 
 void disc0ver::STLModel::Init()
 {
+	/* Github-SkyLine Model 初始化 */
 	std::vector<Texture> tmp;
 	for (auto it = textures.begin(); it != textures.end(); ++it)
 	{
@@ -96,6 +97,7 @@ void disc0ver::STLModel::Init()
 
 void disc0ver::STLModel::draw(Shader& shader)
 {
+	/* Github-SkyLine Model 绘制 */
 	transform.use();
 	for (auto& mesh : meshes)
 	{
@@ -105,6 +107,7 @@ void disc0ver::STLModel::draw(Shader& shader)
 
 void disc0ver::STLModel::addTexture(std::string textureName, const GLchar* texturePath)
 {
+	/* Github-SkyLine Model 添加纹理 */
 	Texture texture(textureName, texturePath);
 	textures[textureName] = texture;
 	meshes[0].textures.push_back(texture);
@@ -112,6 +115,24 @@ void disc0ver::STLModel::addTexture(std::string textureName, const GLchar* textu
 
 void disc0ver::STLModel::loadModel(const std::string path)
 {
+	/* 
+		Github-SkyLine Model 从指定路径加载模型文件(.stl) 
+		其格式大致为:
+
+		solid stlmesh
+		facet normal floatx floaty floatz
+			outer loop
+				vertex floatx floaty floatz
+				vertex floatx floaty floatz
+				vertex floatx floaty floatz
+			endloop
+		end facet
+		facet......
+		......
+		end facet
+		endsolid stlmesh
+
+	*/
 	std::cout << "load model " << path << std::endl;
 	std::ifstream infile;
 	std::string tmp_str;
@@ -139,9 +160,11 @@ void disc0ver::STLModel::loadModel(const std::string path)
 		face >> tmp_str;
 		if(tmp_str == "facet")
 		{
+			// 法线坐标
 			face >> tmp_str >> n1 >> n2 >> n3;
 			// outer loop
 			infile.getline(line, sizeof(line));
+			// 三个顶点坐标
 			for(int i = 0; i < 3;i ++)
 			{
 				infile.getline(line, sizeof(line));
@@ -159,6 +182,7 @@ void disc0ver::STLModel::loadModel(const std::string path)
 
 void disc0ver::STLModel::scale()
 {
+	/* 依据模型的坐标范围自动进行缩放 */
 	float max_x = vertices[0].position.x;
 	float max_y = vertices[0].position.y;
 	float max_z = vertices[0].position.z;
@@ -197,6 +221,7 @@ void disc0ver::Model::Init()
 
 void disc0ver::Model::draw(Shader& shader)
 {
+	/* Marry.obj 模型绘制 */
 	transform.use();
 	for (auto& mesh : meshes)
 	{
@@ -206,6 +231,7 @@ void disc0ver::Model::draw(Shader& shader)
 
 void disc0ver::Model::addTexture(std::string textureName, const GLchar* texturePath)
 {
+	/* Marry.obj 添加纹理 */
 	Texture texture(textureName, texturePath);
 	textures[textureName] = texture;
 	meshes[0].textures.push_back(texture);
@@ -213,6 +239,7 @@ void disc0ver::Model::addTexture(std::string textureName, const GLchar* textureP
 
 void disc0ver::Model::loadModel(const std::string path)
 {
+	/* Marry.obj 加载模型文件 */
 	std::cout << "load model " << path << std::endl;
 	std::ifstream infile;
 	std::string tmp_str;
@@ -240,16 +267,19 @@ void disc0ver::Model::loadModel(const std::string path)
 		std::istringstream ss(line);
 
 		ss >> tmp_str;
+		// 顶点位置坐标
 		if (tmp_str == "v")
 		{
 			ss >> x >> y >> z;
 			v.emplace_back(x, y, z);
 		}
+		// 顶点法线坐标
 		else if(tmp_str == "vn")
 		{
 			ss >> n1 >> n2 >> n3;
 			vn.emplace_back(n1, n2, n3);
 		}
+		// 顶点纹理坐标
 		else if (tmp_str == "vt")
 		{
 			ss >> uvx >> uvy;
@@ -307,6 +337,7 @@ void disc0ver::Model::loadModel(const std::string path)
 
 void disc0ver::Model::scale()
 {
+	/* 依据模型的坐标范围自动进行缩放 */
 	float max_x = vertices[0].position.x;
 	float max_y = vertices[0].position.y;
 	float max_z = vertices[0].position.z;
