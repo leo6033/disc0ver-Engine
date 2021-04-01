@@ -116,6 +116,8 @@ namespace disc0ver {
 		std::vector<unsigned int> indices;
 	};
 
+	// github skyline model
+	// https://skyline.github.com/
 	class STLModel: public IBaseModel
 	{
 	public:
@@ -140,6 +142,7 @@ namespace disc0ver {
 		void scale();
 	};
 
+	// Marry.obj 模型
 	class Model: public IBaseModel
 	{
 	public:
