@@ -32,6 +32,7 @@ namespace disc0ver {
 	public:
 		vec3() = default;
 		vec3(float e0, float e1, float e2) { e[0] = e0; e[1] = e1; e[2] = e2; }
+		vec3(const glm::vec3& v) { e[0] = v.x, e[1] = v.y, e[2] = v.z; }
 
 		
 		// get
@@ -61,6 +62,8 @@ namespace disc0ver {
 		inline vec3& operator/=(const vec3& v) { e[0] /= v.e[0]; e[1] /= v.e[1]; e[2] /= v.e[2]; return *this; }
 		inline vec3& operator*=(const float t) { e[0] *= t; e[1] *= t; e[2] *= t; return *this; }
 		inline vec3& operator/=(const float t) { float k = 1.0 / t; e[0] *= k; e[1] *= k; e[2] *= k; return *this; }
+		inline vec3& operator=(const glm::vec3& v) { e[0] = v.x; e[1] = v.y; e[2] = v.z; return *this; }
+		inline operator glm::vec3() const { return glm::vec3(e[0], e[1], e[2]); }
 
 		inline float length() const { return sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]); }
 		inline float squared_length() const { return e[0] * e[0] + e[1] * e[1] + e[2] * e[2]; }
