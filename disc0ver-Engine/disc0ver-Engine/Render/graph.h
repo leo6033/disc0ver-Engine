@@ -22,11 +22,11 @@
 
 namespace disc0ver {
 
+	void scale(std::vector<Vertex>& vertices);
+
 	class IBaseModel {
 	public:
 		virtual ~IBaseModel() = default;
-		virtual void Init() = 0; // 模型初始化
-		// virtual void resize() = 0; // 
 		virtual void draw(Shader& shader) = 0; // 绘制图形
 		virtual void addTexture(std::string textureName, const GLchar* texturePath) = 0;
 		Transform transform;
@@ -35,13 +35,12 @@ namespace disc0ver {
 	// 矩形模型
 	class rectangleModel : public IBaseModel {
 	public:
-		~rectangleModel();
-		void Init() override;
-		//void resize() override;
+		rectangleModel() { meshes.emplace_back(move(vertices), move(indices), std::vector<Texture>()); }
+		~rectangleModel() {};
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
+		Material& getMaterial() { return meshes[0].getMaterial(); }
 		std::map<std::string, Texture> textures;
-		//Transform transform;
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices = {
@@ -60,12 +59,19 @@ namespace disc0ver {
 	// 立方体模型
 	class cubeModel : public IBaseModel {
 	public:
-		~cubeModel();
-		void Init() override;
-		// void resize() override;
+		cubeModel() 
+		{ 
+			indices.resize(vertices.size());
+			for (int i = 0; i < indices.size(); i++)
+				indices[i] = i;
+			meshes.emplace_back(move(vertices), move(indices), std::vector<Texture>());
+		}
+		~cubeModel() {};
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
+		Material& getMaterial() { return meshes[0].getMaterial(); }
 		std::map<std::string, Texture> textures;
+
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices = {
@@ -116,54 +122,59 @@ namespace disc0ver {
 		std::vector<unsigned int> indices;
 	};
 
+	//点光源模型
+	//todo:目前是立方体形状 考虑之后改为球形
+	using pointLightModel = cubeModel;
+
 	// github skyline model
 	// https://skyline.github.com/
 	class STLModel: public IBaseModel
 	{
 	public:
+		friend void scale(std::vector<Vertex>& vertices);
 		STLModel(const char* path)
 		{
+			// 从指定路径读取模型文件生成vertices数组
 			loadModel(path);
-			scale();
+			// 适度缩放模型
+			scale(vertices);
+			indices.resize(vertices.size());
+			for (int i = 0; i < indices.size(); i++)
+			{
+				indices[i] = i;
+			}
+			meshes.emplace_back(move(vertices), move(indices), std::vector<Texture>());
 		}
-
-		void Init() override;
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
-		//Transform transform;
 	private:
 		std::vector<Mesh> meshes;
-		//std::string directory;
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 
 		void loadModel(const std::string path);
-		void scale();
 	};
 
 	// Marry.obj 模型
 	class Model: public IBaseModel
 	{
 	public:
+		friend void scale(std::vector<Vertex>& vertices);
 		Model(const char* path)
 		{
 			loadModel(path);
-			scale();
+			scale(vertices);
 		}
-		void Init() override;
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
 		std::map<std::string, Texture> textures;
-		//Transform transform;
 	private:
 		std::vector<Mesh> meshes;
-		//std::string directory;
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 
 		void loadModel(const std::string path);
-		void scale();
 		void createMesh(std::string materialName, std::vector<Material>& materials);
 		void loadMaterial(std::vector<Material> &materials, std::string path);
 		

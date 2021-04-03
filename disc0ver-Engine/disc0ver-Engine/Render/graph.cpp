@@ -3,26 +3,51 @@
  * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-09-27
+ * 
+ * @Contributor: xiji
+ * @Email: wncka@foxmail.com
+ * @Date: 2021-04-03
  */
 
 #include "graph.h"
 
-disc0ver::rectangleModel::~rectangleModel()
+//========================================== some functions ======================================
+
+void disc0ver::scale(std::vector<Vertex>& vertices)
 {
-	/*glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);*/
+	/* 依据模型的坐标范围自动进行缩放 */
+	float max_x = vertices[0].position.x;
+	float max_y = vertices[0].position.y;
+	float max_z = vertices[0].position.z;
+
+	float min_x = max_x, min_y = max_y, min_z = max_z;
+
+	for (int i = 1; i < vertices.size(); i++)
+	{
+		if (vertices[i].position.x > max_x) max_x = vertices[i].position.x;
+		else if (vertices[i].position.x < min_x) min_x = vertices[i].position.x;
+
+		if (vertices[i].position.y > max_y) max_y = vertices[i].position.y;
+		else if (vertices[i].position.y < min_y) min_y = vertices[i].position.y;
+
+		if (vertices[i].position.z > max_z) max_z = vertices[i].position.z;
+		else if (vertices[i].position.z < min_z) min_z = vertices[i].position.z;
+	}
+
+	float  m_scale = 100;
+	m_scale = m_scale < (1.0 / (max_x - min_x)) ? m_scale : (1.0 / (max_x - min_x));
+	m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));
+	m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));
+
+	for (auto& vertice : vertices)
+	{
+		vertice.position *= m_scale;
+	}
+	// you can also set transform.scale
+	// transform.scale = { m_scale, m_scale, m_scale };
 }
 
-void disc0ver::rectangleModel::Init() {
-	/* 矩形模型——初始化 */
-	Mesh mesh(vertices, indices, std::vector<Texture>());
-	meshes.push_back(mesh);
-}
-
-//void disc0ver::rectangleModel::resize()
-//{
-//}
+//========================================== rectangleModel ======================================
 
 void disc0ver::rectangleModel::draw(Shader &shader)
 {
@@ -42,24 +67,7 @@ void disc0ver::rectangleModel::addTexture(std::string textureName, const GLchar*
 	meshes[0].textures.push_back(texture);
 }
 
-disc0ver::cubeModel::~cubeModel()
-{
-}
-
-void disc0ver::cubeModel::Init()
-{
-	/* 立方体模型——初始化 */
-	for(int i = 0; i < vertices.size(); i ++)
-	{
-		indices.push_back(i);
-	}
-	Mesh mesh(vertices, indices, std::vector<Texture>());
-	meshes.push_back(mesh);
-}
-
-//void disc0ver::cubeModel::resize()
-//{
-//}
+//========================================== cubeModel ======================================
 
 void disc0ver::cubeModel::draw(Shader &shader)
 {
@@ -79,21 +87,7 @@ void disc0ver::cubeModel::addTexture(std::string textureName, const GLchar* text
 	meshes[0].textures.push_back(texture);
 }
 
-void disc0ver::STLModel::Init()
-{
-	/* Github-SkyLine Model 初始化 */
-	std::vector<Texture> tmp;
-	for (auto it = textures.begin(); it != textures.end(); ++it)
-	{
-		tmp.push_back(it->second);
-	}
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		indices.push_back(i);
-	}
-	Mesh mesh(vertices, indices, tmp);
-	meshes.push_back(mesh);
-}
+//========================================== STLModel ======================================
 
 void disc0ver::STLModel::draw(Shader& shader)
 {
@@ -180,44 +174,7 @@ void disc0ver::STLModel::loadModel(const std::string path)
 	}
 }
 
-void disc0ver::STLModel::scale()
-{
-	/* 依据模型的坐标范围自动进行缩放 */
-	float max_x = vertices[0].position.x;
-	float max_y = vertices[0].position.y;
-	float max_z = vertices[0].position.z;
-
-	float min_x = max_x, min_y = max_y, min_z = max_z;
-	
-	for(int i = 1; i < vertices.size(); i ++)
-	{
-		if (vertices[i].position.x > max_x) max_x = vertices[i].position.x;
-		else if (vertices[i].position.x < min_x) min_x = vertices[i].position.x;
-
-		if (vertices[i].position.y > max_y) max_y = vertices[i].position.y;
-		else if (vertices[i].position.y < min_y) min_y = vertices[i].position.y;
-
-		if (vertices[i].position.z > max_z) max_z = vertices[i].position.z;
-		else if (vertices[i].position.z < min_z) min_z = vertices[i].position.z;
-	}
-
-	float  m_scale = 100;
-	m_scale = m_scale < (1.0 / (max_x - min_x)) ? m_scale : (1.0 / (max_x - min_x));
-	m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));
-	m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));
-
-	for (auto& vertice : vertices)
-	{
-		vertice.position *= m_scale;
-	}
-	// you can also set transform.scale
-	// transform.scale = { m_scale, m_scale, m_scale };
-}
-
-void disc0ver::Model::Init()
-{
-
-}
+//========================================== Model ======================================
 
 void disc0ver::Model::draw(Shader& shader)
 {
@@ -333,38 +290,6 @@ void disc0ver::Model::loadModel(const std::string path)
 	}
 	if (flag == 1)
 		createMesh(materialName, materials);
-}
-
-void disc0ver::Model::scale()
-{
-	/* 依据模型的坐标范围自动进行缩放 */
-	float max_x = vertices[0].position.x;
-	float max_y = vertices[0].position.y;
-	float max_z = vertices[0].position.z;
-
-	float min_x = max_x, min_y = max_y, min_z = max_z;
-
-	for (int i = 1; i < vertices.size(); i++)
-	{
-		if (vertices[i].position.x > max_x) max_x = vertices[i].position.x;
-		else if (vertices[i].position.x < min_x) min_x = vertices[i].position.x;
-
-		if (vertices[i].position.y > max_y) max_y = vertices[i].position.y;
-		else if (vertices[i].position.y < min_y) min_y = vertices[i].position.y;
-
-		if (vertices[i].position.z > max_z) max_z = vertices[i].position.z;
-		else if (vertices[i].position.z < min_z) min_z = vertices[i].position.z;
-	}
-
-	float  m_scale = 100;
-	m_scale = m_scale < (1.0 / (max_x - min_x)) ? m_scale : (1.0 / (max_x - min_x));
-	m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));
-	m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));
-
-	for (auto& vertice : vertices)
-	{
-		vertice.position *= m_scale;
-	}
 }
 
 void disc0ver::Model::createMesh(std::string materialName, std::vector<Material>& materials)
