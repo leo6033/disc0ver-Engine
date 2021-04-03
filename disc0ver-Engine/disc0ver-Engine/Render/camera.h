@@ -6,6 +6,8 @@
  */
 
 #pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -14,7 +16,7 @@
 #include <vector>
 
 namespace disc0ver {
-	
+
 	enum CameraMovement {
 		FORWARD,
 		BACKWARD,
@@ -58,7 +60,7 @@ namespace disc0ver {
 		float zoom_;
 
 	public:
-		IBaseCamera(): forward_(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed_(SPEED),
+		IBaseCamera() : forward_(glm::vec3(0.0f, 0.0f, -1.0f)), movement_speed_(SPEED),
 			mouse_sensitivity_(SENSITIVITY), zoom_(ZOOM) {}
 
 		// 得到view矩阵
@@ -76,16 +78,16 @@ namespace disc0ver {
 	class FPSCamera : public IBaseCamera {
 	public:
 		FPSCamera(
-			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), 
-			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), 
-			float yaw = YAW, 
+			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
+			float yaw = YAW,
 			float pitch = PITCH
 		);
-		
+
 		FPSCamera(
-			float pos_x, float pos_y, float pos_z, 
-			float up_x, float up_y, float up_z, 
-			float yaw, 
+			float pos_x, float pos_y, float pos_z,
+			float up_x, float up_y, float up_z,
+			float yaw,
 			float pitch
 		);
 	public:
@@ -95,3 +97,5 @@ namespace disc0ver {
 
 	};
 }
+
+#endif // !CAMERA_H

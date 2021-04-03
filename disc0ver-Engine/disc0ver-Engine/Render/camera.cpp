@@ -5,13 +5,8 @@
  * @Date: 2020-10-07
  */
 
-#ifndef CAMERA_H
-#define CAMERA_H
-
 #include "camera.h"
 
-
-#endif // !CAMERA_H
 
 /*得到view矩阵*/
 glm::mat4 disc0ver::IBaseCamera::GetViewMatrix() const
