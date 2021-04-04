@@ -208,7 +208,7 @@ void disc0ver::Model::loadModel(const std::string path)
 	}
 
 	char line[256];
-	std::vector<vec3<TRANSFORM>> v, vn;
+	std::vector<Position> v, vn;
 	std::vector<glm::vec2> vt;
 	std::vector<Material> materials;
 	unsigned int Index[9];

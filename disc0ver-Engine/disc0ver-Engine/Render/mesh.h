@@ -21,12 +21,12 @@ namespace disc0ver
 	// 顶点
 	struct Vertex {
 		Position position;	// 顶点位置
-		vec3<TRANSFORM> normal;	// 顶点法向
+		Position normal;	// 顶点法向
 		glm::vec2 texCoords;	// 纹理
 
 		Vertex() = default;
 		Vertex(float x, float y, float z, float n1, float n2, float n3, float u, float v) : position(x, y, z), normal(n1, n2, n3), texCoords(u, v) {}
-		Vertex(vec3<TRANSFORM> v, vec3<TRANSFORM> vn, glm::vec2 vt): position(v), normal(vn), texCoords(vt) {}
+		Vertex(Position v, Position vn, glm::vec2 vt): position(v), normal(vn), texCoords(vt) {}
 	};
 	
 	class Mesh

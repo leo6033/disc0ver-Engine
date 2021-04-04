@@ -21,9 +21,9 @@ namespace disc0ver {
 	class BaseLight
 	{
 	public:
-		rgb ambient;
-		rgb diffuse;
-		rgb specular;
+		Rgb ambient;
+		Rgb diffuse;
+		Rgb specular;
 
 		BaseLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular) :ambient(ambient), diffuse(diffuse), specular(specular) {}
 		BaseLight(float ambient_r = 0, float ambient_g = 0, float ambient_b = 0, float diffuse_r = 0, float diffuse_g = 0, float diffuse_b = 0,
