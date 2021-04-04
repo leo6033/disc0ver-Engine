@@ -17,16 +17,40 @@
 #include <glm/glm.hpp>
 
 namespace disc0ver {
+
+	// 纹理类型 目前支持 漫反射(环境光)贴图 镜面光贴图
+	enum class TextureType 
+	{
+		DIFFUSE,
+		SPECULAR
+	};
+
 	class Texture {
 		/*纹理对象*/
 	public:
 		unsigned int texture;
-		Texture() {}
-		Texture(std::string textureName, const GLchar* texturePath);
+		Texture() {};
+		Texture(std::string textureName, const GLchar* texturePath, TextureType textureType = TextureType::DIFFUSE, bool flipVertically = true);
 		void use(unsigned int ID);
 		std::string getName() const { return textureName; }
+		TextureType getType() const { return textureType; }
+		std::string getTypeString() const
+		{
+			switch (textureType)
+			{
+			case disc0ver::TextureType::DIFFUSE:
+				return "diffuse";
+				break;
+			case disc0ver::TextureType::SPECULAR:
+				return "specular";
+				break;
+			default:
+				break;
+			}
+		}
 	private:
 		std::string textureName;
+		TextureType textureType;
 	};
 
 	class Material
@@ -35,7 +59,6 @@ namespace disc0ver {
 	public:
 		Material()
 		{
-			name;
 			Ns = 0.0f;
 			Ni = 0.0f;
 			d = 0.0f;
