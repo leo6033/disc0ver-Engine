@@ -17,7 +17,7 @@
 
 namespace disc0ver {
 
-	enum CameraMovement {
+	enum class CameraMovementDirection {
 		FORWARD,
 		BACKWARD,
 		LEFT,
@@ -26,7 +26,7 @@ namespace disc0ver {
 		DOWN
 	};
 
-	enum CameraProjection {
+	enum class CameraProjection {
 		PERSEPCTIVE,
 		ORTHO
 	};
@@ -66,11 +66,11 @@ namespace disc0ver {
 		// 得到view矩阵
 		glm::mat4 GetViewMatrix() const;
 		// 处理键盘输入—WASD控制相机移动
-		virtual void ProcessKeyboard() {}
+		virtual void ProcessKeyboard(CameraMovementDirection direction, float deltaTime) {}
 		// 处理鼠标输入—控制相机转向
-		virtual void ProcessMouseMovement() {}
+		virtual void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true) {}
 		// 处理滚轮输入—放大/缩小
-		virtual void ProcessMouseScroll() {}
+		virtual void ProcessMouseScroll(float yoffset) {}
 	protected:
 		void UpdateCameraVectors();
 	};
@@ -91,9 +91,9 @@ namespace disc0ver {
 			float pitch
 		);
 	public:
-		void ProcessKeyboard(CameraMovement direction, float deltaTime);
-		void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
-		void ProcessMouseScroll(float yoffset);
+		void ProcessKeyboard(CameraMovementDirection direction, float deltaTime) override;
+		void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true) override;
+		void ProcessMouseScroll(float yoffset) override;
 
 	};
 }
