@@ -36,12 +36,12 @@ namespace disc0ver {
 
 		
 		// get
-		inline float get_x() { static_assert(T == Vec3Type::TRANSFORM, "Vec3Type::RGB has no contribute x, please use r"); return e[0] ; }
-		inline float get_y() { static_assert(T == Vec3Type::TRANSFORM, "Vec3Type::RGB has no contribute y, please use g"); return e[1]; }
-		inline float get_z() { static_assert(T == Vec3Type::TRANSFORM, "Vec3Type::RGB has no contribute z, please use b"); return e[2]; }
-		inline float get_r() { static_assert(T == Vec3Type::RGB, "Vec3Type::TRANSFORM has no contribute r, please use x"); return e[0]; }
-		inline float get_g() { static_assert(T == Vec3Type::RGB, "Vec3Type::TRANSFORM has no contribute g, please use y"); return e[1]; }
-		inline float get_b() { static_assert(T == Vec3Type::RGB, "Vec3Type::TRANSFORM has no contribute b, please use z"); return e[2]; }
+		inline float get_x() const { static_assert(T == Vec3Type::TRANSFORM, "Vec3Type::RGB has no contribute x, please use r"); return e[0] ; }
+		inline float get_y() const { static_assert(T == Vec3Type::TRANSFORM, "Vec3Type::RGB has no contribute y, please use g"); return e[1]; }
+		inline float get_z() const { static_assert(T == Vec3Type::TRANSFORM, "Vec3Type::RGB has no contribute z, please use b"); return e[2]; }
+		inline float get_r() const { static_assert(T == Vec3Type::RGB, "Vec3Type::TRANSFORM has no contribute r, please use x"); return e[0]; }
+		inline float get_g() const { static_assert(T == Vec3Type::RGB, "Vec3Type::TRANSFORM has no contribute g, please use y"); return e[1]; }
+		inline float get_b() const { static_assert(T == Vec3Type::RGB, "Vec3Type::TRANSFORM has no contribute b, please use z"); return e[2]; }
 
 		// set-[
 		inline void set_x(float value) { static_assert(T == Vec3Type::TRANSFORM, "Vec3Type::RGB has no contribute x, please use r"); e[0] = value; }
