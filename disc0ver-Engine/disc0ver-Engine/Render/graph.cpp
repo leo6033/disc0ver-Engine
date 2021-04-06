@@ -91,7 +91,7 @@ void disc0ver::cubeModel::addTexture(std::string textureName, const GLchar* text
 
 void disc0ver::STLModel::draw(Shader& shader)
 {
-	/* Github-SkyLine Model 绘制 */
+	/* .stl Model 绘制 */
 	transform.use();
 	for (auto& mesh : meshes)
 	{
@@ -101,7 +101,11 @@ void disc0ver::STLModel::draw(Shader& shader)
 
 void disc0ver::STLModel::addTexture(std::string textureName, const GLchar* texturePath)
 {
-	/* Github-SkyLine Model 添加纹理 */
+	/* 
+		.stl Model 添加纹理 
+
+		我建议不要使用这个函数 因为模型文件有其对应的纹理(如果有 则相关信息可以在.mtl文件中找到) 添加不匹配的纹理可能造成奇怪的结果
+	*/
 	Texture texture(textureName, texturePath);
 	textures[textureName] = texture;
 	meshes[0].textures.push_back(texture);
@@ -110,7 +114,7 @@ void disc0ver::STLModel::addTexture(std::string textureName, const GLchar* textu
 void disc0ver::STLModel::loadModel(const std::string path)
 {
 	/* 
-		Github-SkyLine Model 从指定路径加载模型文件(.stl) 
+		从指定路径加载模型文件(.stl) 
 		
 		其格式大致为:
 
@@ -179,7 +183,7 @@ void disc0ver::STLModel::loadModel(const std::string path)
 
 void disc0ver::Model::draw(Shader& shader)
 {
-	/* Marry.obj 模型绘制 */
+	/* .obj 模型绘制 */
 	transform.use();
 	for (auto& mesh : meshes)
 	{
@@ -189,7 +193,11 @@ void disc0ver::Model::draw(Shader& shader)
 
 void disc0ver::Model::addTexture(std::string textureName, const GLchar* texturePath)
 {
-	/* Marry.obj 添加纹理 */
+	/* 
+		.obj 添加纹理 
+
+		我建议不要使用这个函数 因为模型文件有其对应的纹理(如果有 则相关信息可以在.mtl文件中找到) 添加不匹配的纹理可能造成奇怪的结果
+	*/
 	Texture texture(textureName, texturePath);
 	textures[textureName] = texture;
 	meshes[0].textures.push_back(texture);
@@ -198,7 +206,7 @@ void disc0ver::Model::addTexture(std::string textureName, const GLchar* textureP
 void disc0ver::Model::loadModel(const std::string path)
 {
 	/* 
-		Marry.obj 加载模型文件(.obj)  
+		.obj 加载模型文件(.obj)  
 
 		说一下比较常见的属性：
 

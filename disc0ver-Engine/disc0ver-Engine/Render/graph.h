@@ -127,8 +127,8 @@ namespace disc0ver {
 	//todo:目前是立方体形状 考虑之后改为球形
 	using pointLightModel = cubeModel;
 
-	// github skyline model
-	// https://skyline.github.com/
+	// .stl 模型
+	// 比如 github skyline model https://skyline.github.com/
 	class STLModel: public IBaseModel
 	{
 	public:
@@ -157,7 +157,7 @@ namespace disc0ver {
 		void loadModel(const std::string path);
 	};
 
-	// Marry.obj 模型
+	// .obj 模型
 	class Model: public IBaseModel
 	{
 	public:
