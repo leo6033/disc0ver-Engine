@@ -22,7 +22,7 @@
 
 namespace disc0ver {
 
-	void scale(std::vector<Vertex>& vertices);
+	void scale(std::vector<Vertex>& vertices, Transform& trans);
 
 	class IBaseModel {
 	public:
@@ -137,7 +137,7 @@ namespace disc0ver {
 			// 从指定路径读取模型文件生成vertices数组
 			loadModel(path);
 			// 适度缩放模型
-			scale(vertices);
+			scale(vertices, transform);
 			indices.resize(vertices.size());
 			for (int i = 0; i < indices.size(); i++)
 			{
@@ -164,7 +164,7 @@ namespace disc0ver {
 		Model(const char* path)
 		{
 			loadModel(path);
-			scale(vertices);
+			scale(vertices, transform);
 		}
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;

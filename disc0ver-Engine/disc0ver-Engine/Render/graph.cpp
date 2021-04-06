@@ -13,7 +13,7 @@
 
 //========================================== some functions ======================================
 
-void disc0ver::scale(std::vector<Vertex>& vertices)
+void disc0ver::scale(std::vector<Vertex>& vertices, Transform& trans)
 {
 	/* 依据模型的坐标范围自动进行缩放 */
 	float max_x = vertices[0].position.x;
@@ -39,12 +39,12 @@ void disc0ver::scale(std::vector<Vertex>& vertices)
 	m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));
 	m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));
 
-	for (auto& vertice : vertices)
-	{
-		vertice.position *= m_scale;
-	}
-	// you can also set transform.scale
-	// transform.scale = { m_scale, m_scale, m_scale };
+	trans.scale = { m_scale,m_scale,m_scale };
+	// 也可以使用下面的代码直接修改 不过应该会更慢一点 尤其是顶点数量很多的时候...
+	//for (auto& vertice : vertices)
+	//{
+	//	vertice.position *= m_scale;
+	//}
 }
 
 //========================================== rectangleModel ======================================
@@ -111,6 +111,7 @@ void disc0ver::STLModel::loadModel(const std::string path)
 {
 	/* 
 		Github-SkyLine Model 从指定路径加载模型文件(.stl) 
+		
 		其格式大致为:
 
 		solid stlmesh
@@ -127,14 +128,14 @@ void disc0ver::STLModel::loadModel(const std::string path)
 		endsolid stlmesh
 
 	*/
-	std::cout << "load model " << path << std::endl;
+	std::cout << "Loading model......\n" << "Path: " << path << '\n' << std::endl;
 	std::ifstream infile;
 	std::string tmp_str;
 	infile.open(path);
 
 	if(!infile.is_open())
 	{
-		throw "model not found";
+		throw "Model file not found";
 	}
 
 	// 读取头 solid filename
@@ -196,15 +197,60 @@ void disc0ver::Model::addTexture(std::string textureName, const GLchar* textureP
 
 void disc0ver::Model::loadModel(const std::string path)
 {
-	/* Marry.obj 加载模型文件 */
-	std::cout << "load model " << path << std::endl;
+	/* 
+		Marry.obj 加载模型文件(.obj)  
+
+		说一下比较常见的属性：
+
+		# 开头的是注释行
+
+		v(vertex) 开头的是顶点位置信息 后跟3个空格分隔的float值 代表xyz三维坐标
+
+		vt(vertex texture) 开头的是顶点纹理信息 后跟2个空格分隔的float值 代表uv纹理坐标
+
+		vn(vertex normal) 开头的是顶点法线信息 后跟3个空格分隔的float值 代表法线的xyz三维坐标
+
+		f(face) 开头的是模型的三角面列表 后跟3组空格分隔的面顶点信息 每一组由三个/分割的int值组成 分别代表该点的v、vt、vn索引(注意 这个是从1开始的)
+		要拿到具体信息的话需要依据索引从之前读取的v、vt、vn列表中取得
+
+		mtllib(material library) 开头的是材质库 后跟.mtl文件的名称(可能会有多个 这个例子中只有1个)
+
+		usemtl 后跟材质名称 你可以在.mtl文件中找到对应名称的材质信息 
+		usemtl指定了材质之后 以后的面都是使用这一材质 直到遇到下一个usemtl来指定新的材质
+
+		o 对象名 
+
+		g 组名称
+
+		s 光滑组 一般在f前出现
+
+		.mtl文件：
+
+		一个mtl文件可能定义了多个材质 每个材质以newmtl打头 比如 newmtl materialName1
+
+		Ka 开头的是材质的环境颜色 后跟三个[0,1]的float值 代表rgb
+
+		Kd 开头的是材质的漫反射颜色 同上
+
+		Ks 开头的是材质的镜面反射颜色 同上
+
+		Ns 开头的是Phong光照模型中静脉反射的高光系数 后跟1个float
+
+		d 开头的是不透明度 后跟1个float 1.0代表完全不透明 Tr与它相反 可以认为Tr = 1.0 - d
+
+		Ni 开头的是折射率 后跟1个float
+
+		如果你想了解更多信息 可以去看wiki： https://en.wikipedia.org/wiki/Wavefront_.obj_file
+		
+	*/
+	std::cout << "Loading model......\n" << "Path: " << path << '\n' << std::endl;
 	std::ifstream infile;
 	std::string tmp_str;
 	infile.open(path);
 
 	if (!infile.is_open())
 	{
-		throw "model file not found";
+		throw "Model file not found";
 	}
 
 	char line[256];
