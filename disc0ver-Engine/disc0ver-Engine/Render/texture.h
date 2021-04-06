@@ -75,11 +75,11 @@ namespace disc0ver {
 		glm::vec3 Ks;
 		// Specular Exponent - 镜面光反光度
 		float Ns;
-		// Optical Density
+		// Optical Density - 光密度 又称 折射率
 		float Ni;
-		// Dissolve
+		// Dissolve - 不透明度 1.0即完全不透明 0.0即完全透明
 		float d;
-		// Illumination
+		// Illumination - 光照模型 这个是在 https://en.wikipedia.org/wiki/Wavefront_.obj_file 看到的 目前来看应该没什么用
 		int illum;
 		// Ambient Texture Map - 环境光贴图
 		std::string map_Ka;
