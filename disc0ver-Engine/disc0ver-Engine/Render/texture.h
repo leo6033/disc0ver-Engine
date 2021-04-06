@@ -13,6 +13,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "..\math\DGM.h"
 
 #include <glm/glm.hpp>
 
@@ -68,11 +69,11 @@ namespace disc0ver {
 		// Material Name - 名称
 		std::string name;
 		// Ambient Color - 环境光
-		glm::vec3 Ka;
+		Rgb Ka;
 		// Diffuse Color - 漫反射
-		glm::vec3 Kd;
+		Rgb Kd;
 		// Specular Color - 镜面光
-		glm::vec3 Ks;
+		Rgb Ks;
 		// Specular Exponent - 镜面光反光度
 		float Ns;
 		// Optical Density - 光密度 又称 折射率
