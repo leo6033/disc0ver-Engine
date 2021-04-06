@@ -13,38 +13,38 @@
 
 //========================================== some functions ======================================
 
-void disc0ver::scale(std::vector<Vertex>& vertices, Transform& trans)
+void disc0ver::scale(const std::vector<Mesh>& meshes, Transform& trans)
 {
 	/* 依据模型的坐标范围自动进行缩放 */
-	float max_x = vertices[0].position.x;
-	float max_y = vertices[0].position.y;
-	float max_z = vertices[0].position.z;
+	float max_x = std::numeric_limits<float>::min();
+	float min_x = std::numeric_limits<float>::max();
+	float max_y = max_x, max_z = max_x;
+	float min_y = min_x, min_z = min_x;
 
-	float min_x = max_x, min_y = max_y, min_z = max_z;
-
-	for (int i = 1; i < vertices.size(); i++)
+	for (const Mesh& mesh : meshes)
 	{
-		if (vertices[i].position.x > max_x) max_x = vertices[i].position.x;
-		else if (vertices[i].position.x < min_x) min_x = vertices[i].position.x;
+		const std::vector<Vertex>& vertices = mesh.vertices;
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			if (vertices[i].position.x > max_x) max_x = vertices[i].position.x;
+			else if (vertices[i].position.x < min_x) min_x = vertices[i].position.x;
 
-		if (vertices[i].position.y > max_y) max_y = vertices[i].position.y;
-		else if (vertices[i].position.y < min_y) min_y = vertices[i].position.y;
+			if (vertices[i].position.y > max_y) max_y = vertices[i].position.y;
+			else if (vertices[i].position.y < min_y) min_y = vertices[i].position.y;
 
-		if (vertices[i].position.z > max_z) max_z = vertices[i].position.z;
-		else if (vertices[i].position.z < min_z) min_z = vertices[i].position.z;
+			if (vertices[i].position.z > max_z) max_z = vertices[i].position.z;
+			else if (vertices[i].position.z < min_z) min_z = vertices[i].position.z;
+		}
 	}
+	if (max_x > min_x)
+	{
+		float  m_scale = 100;
+		m_scale = m_scale < (1.0 / (max_x - min_x)) ? m_scale : (1.0 / (max_x - min_x));
+		m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));
+		m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));
 
-	float  m_scale = 100;
-	m_scale = m_scale < (1.0 / (max_x - min_x)) ? m_scale : (1.0 / (max_x - min_x));
-	m_scale = m_scale < (1.0 / (max_y - min_y)) ? m_scale : (1.0 / (max_y - min_y));
-	m_scale = m_scale < (1.0 / (max_z - min_z)) ? m_scale : (1.0 / (max_z - min_z));
-
-	trans.scale = { m_scale,m_scale,m_scale };
-	// 也可以使用下面的代码直接修改 不过应该会更慢一点 尤其是顶点数量很多的时候...
-	//for (auto& vertice : vertices)
-	//{
-	//	vertice.position *= m_scale;
-	//}
+		trans.scale = { m_scale,m_scale,m_scale };
+	}
 }
 
 //========================================== rectangleModel ======================================
@@ -240,6 +240,18 @@ void disc0ver::Model::loadModel(const std::string path)
 
 		Ni 开头的是折射率 后跟1个float
 
+		map_Ka 开头的是环境贴图 它通常和漫反射贴图相同
+
+		map_Kd 开头的是漫反射贴图
+
+		map_Ks 开头的是镜面光贴图
+
+		map_Ns 开头的是镜面高光贴图
+
+		map_d 开头的是透明度贴图
+
+		map_bump 开头的是凹凸贴图
+
 		如果你想了解更多信息 可以去看wiki： https://en.wikipedia.org/wiki/Wavefront_.obj_file
 		
 	*/
@@ -338,55 +350,76 @@ void disc0ver::Model::loadModel(const std::string path)
 		createMesh(materialName, materials);
 }
 
-void disc0ver::Model::createMesh(std::string materialName, std::vector<Material>& materials)
+void disc0ver::Model::createMesh(const std::string& materialName, std::vector<Material>& materials)
 {
-	int start = 0;
-	for(auto mesh: meshes)
-	{
-		start += mesh.indices.size();
-	}
-	std::vector<Texture> tmp;
-	for (auto it = textures.begin(); it != textures.end(); ++it)
-	{
-		tmp.push_back(it->second);
-	}
+	/* 创建新网格 */
 
-	for (int i = start; i < vertices.size(); i++)
-	{
-		indices.push_back(i);
-	}
-	Mesh mesh(vertices, indices, tmp);
-	
+	indices.resize(vertices.size());
+	for (int i = 0; i < indices.size(); i++)
+		indices[i] = i;
+	meshes.emplace_back(std::move(vertices), std::move(indices), std::vector<Texture>());
 	if(!materialName.empty())
 	{
-		for (auto material : materials)
+		for (auto& material : materials)
 		{
 			if(material.name == materialName)
 			{
-				mesh.addMaterial(material);
+				meshes.back().addMaterial(material);
 				break;
 			}
 		}
 	}
-	meshes.push_back(mesh);
-	indices.clear();
 }
 
 void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string path)
 {
+	/* 
+		加载mtl文件 
+		
+		一个mtl文件可能定义了多个材质 每个材质以newmtl打头 比如 newmtl materialName1
+
+		Ka 开头的是材质的环境颜色 后跟三个[0,1]的float值 代表rgb
+
+		Kd 开头的是材质的漫反射颜色 同上
+
+		Ks 开头的是材质的镜面反射颜色 同上
+
+		Ns 开头的是Phong光照模型中静脉反射的高光系数 后跟1个float
+
+		d 开头的是不透明度 后跟1个float 1.0代表完全不透明 Tr与它相反 可以认为Tr = 1.0 - d
+
+		Ni 开头的是折射率 后跟1个float
+
+		map_Ka 开头的是环境贴图 它通常和漫反射贴图相同
+
+		map_Kd 开头的是漫反射贴图
+
+		map_Ks 开头的是镜面光贴图
+
+		map_Ns 开头的是镜面高光贴图
+
+		map_d 开头的是透明度贴图
+
+		map_bump 开头的是凹凸贴图
+
+		如果你想了解更多信息 可以去看wiki： https://en.wikipedia.org/wiki/Wavefront_.obj_file
+	*/
 	std::ifstream infile;
 	std::string tmp_str;
 	infile.open(path);
 
 	if (!infile.is_open())
 	{
-		std::cout << "load materials fail " << path << std::endl;
+		std::cout << "Load .mtl file fail " << path << std::endl;
 		return;
 	}
 
 	char line[256];
 	Material tempMaterial;
 	bool listening = false;
+	std::string directory = "";
+	if (path.find('/') != std::string::npos)
+		directory = path.substr(0, path.find_last_of('/') + 1);
 
 	while (!infile.eof())
 	{
@@ -409,8 +442,21 @@ void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string
 				ss >> tempMaterial.name;
 			}
 		}
+		else if (tmp_str == "Ka")
+		{
+			ss >> tempMaterial.Ka[0] >> tempMaterial.Ka[1] >> tempMaterial.Ka[2];
+		}
+		else if (tmp_str == "Kd")
+		{
+			ss >> tempMaterial.Kd[0] >> tempMaterial.Kd[1] >> tempMaterial.Kd[2];
+		}
+		else if (tmp_str == "Ks")
+		{
+			ss >> tempMaterial.Ks[0] >> tempMaterial.Ks[1] >> tempMaterial.Ks[2];
+		}
 		else if(tmp_str == "Ns")
 		{
+			// mtl中Ns的范围是0-1000
 			ss >> tempMaterial.Ns;
 		}
 		else if(tmp_str == "Ni")
@@ -425,25 +471,41 @@ void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string
 		{
 			ss >> tempMaterial.illum;
 		}
+		else if (tmp_str == "map_Ka")
+		{
+			std::string mapPath;
+			ss >> mapPath;
+			tempMaterial.map_Ka = directory + mapPath;
+		}
 		else if(tmp_str == "map_Kd")
 		{
 			std::string mapPath;
 			ss >> mapPath;
-			if (path.find('/') != std::string::npos)
-				mapPath = path.substr(0, path.find_last_of('/') + 1) + mapPath;
-			tempMaterial.map_Kd = mapPath;
+			tempMaterial.map_Kd = directory + mapPath;
 		}
-		else if(tmp_str == "Ka")
+		else if (tmp_str == "map_Ks")
 		{
-			ss >> tempMaterial.Ka[0] >> tempMaterial.Ka[1] >> tempMaterial.Ka[2];
+			std::string mapPath;
+			ss >> mapPath;
+			tempMaterial.map_Ks = directory + mapPath;
 		}
-		else if(tmp_str == "Kd")
+		else if (tmp_str == "map_Ns")
 		{
-			ss >> tempMaterial.Kd[0] >> tempMaterial.Kd[1] >> tempMaterial.Kd[2];
+			std::string mapPath;
+			ss >> mapPath;
+			tempMaterial.map_Ns = directory + mapPath;
 		}
-		else if(tmp_str == "Ks")
+		else if (tmp_str == "map_d")
 		{
-			ss >> tempMaterial.Ks[0] >> tempMaterial.Ks[1] >> tempMaterial.Ks[2];
+			std::string mapPath;
+			ss >> mapPath;
+			tempMaterial.map_d = directory + mapPath;
+		}
+		else if (tmp_str == "map_bump")
+		{
+			std::string mapPath;
+			ss >> mapPath;
+			tempMaterial.map_bump = directory + mapPath;
 		}
 		tmp_str = "";
 	}

@@ -16,13 +16,14 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <limits>
 
 #include "texture.h"
 #include "mesh.h"
 
 namespace disc0ver {
 
-	void scale(std::vector<Vertex>& vertices, Transform& trans);
+	void scale(const std::vector<Mesh>& meshes, Transform& trans);
 
 	class IBaseModel {
 	public:
@@ -131,19 +132,19 @@ namespace disc0ver {
 	class STLModel: public IBaseModel
 	{
 	public:
-		friend void scale(std::vector<Vertex>& vertices);
+		friend void scale(const std::vector<Mesh>& meshes, Transform& trans);
 		STLModel(const char* path)
 		{
 			// 从指定路径读取模型文件生成vertices数组
 			loadModel(path);
-			// 适度缩放模型
-			scale(vertices, transform);
 			indices.resize(vertices.size());
 			for (int i = 0; i < indices.size(); i++)
 			{
 				indices[i] = i;
 			}
 			meshes.emplace_back(move(vertices), move(indices), std::vector<Texture>());
+			// 适度缩放模型
+			scale(meshes, transform);
 		}
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
@@ -160,11 +161,12 @@ namespace disc0ver {
 	class Model: public IBaseModel
 	{
 	public:
-		friend void scale(std::vector<Vertex>& vertices);
+		friend void scale(const std::vector<Mesh>& meshes, Transform& trans);
 		Model(const char* path)
 		{
+			// 从指定路径读取obj文件 生成该模型的网格
 			loadModel(path);
-			scale(vertices, transform);
+			scale(meshes, transform);
 		}
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
@@ -175,7 +177,7 @@ namespace disc0ver {
 		std::vector<unsigned int> indices;
 
 		void loadModel(const std::string path);
-		void createMesh(std::string materialName, std::vector<Material>& materials);
+		void createMesh(const std::string& materialName, std::vector<Material>& materials);
 		void loadMaterial(std::vector<Material> &materials, std::string path);
 		
 	};
