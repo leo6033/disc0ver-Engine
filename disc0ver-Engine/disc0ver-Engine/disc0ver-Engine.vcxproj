@@ -146,6 +146,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\light\light.cpp" />
+    <ClCompile Include="engine\window\window.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -168,6 +170,7 @@
     <ClInclude Include="engine\light\light.h" />
     <ClInclude Include="engine\light\Ray.h" />
     <ClInclude Include="engine\light\RayTracer.h" />
+    <ClInclude Include="engine\window\window.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_glfw.h" />
