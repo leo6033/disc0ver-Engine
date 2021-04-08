@@ -46,7 +46,6 @@ namespace disc0ver
         unsigned int VAO, VBO, EBO;
 		/* 材质 */
 		Material material;
-		bool useMaterial = false;
 
         void setupMesh();
 	};

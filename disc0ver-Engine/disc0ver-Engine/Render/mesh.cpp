@@ -20,22 +20,41 @@ disc0ver::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> ind
 void disc0ver::Mesh::Draw(Shader &shader)
 {
     /* 绘制网格 */
+    bool useTextureDiffuse = false;
+    bool useTextureSpecular = false;
 	for(unsigned int i = 0; i < textures.size(); i ++)
 	{
-        shader.setInt("uTextureSample", 1);
         textures[i].use(i);
-        shader.setInt(textures[i].getName(), static_cast<int>(i));
+        if (textures[i].getType() == TextureType::DIFFUSE)
+        {
+            useTextureDiffuse = true;
+            shader.setInt("material.texture_diffuse", static_cast<int>(i));
+        }
+        else if (textures[i].getType() == TextureType::SPECULAR)
+        {
+            useTextureSpecular = true;
+            shader.setInt("material.texture_specular", static_cast<int>(i));
+        }
 	}
-
-	if(useMaterial)
-	{
-        shader.setVec3("uKd", material.Kd);
-        shader.setVec3("uKs", material.Ks);
-	}
+    if (useTextureDiffuse)
+        shader.setBool("material.use_texture_diffuse", true);
+    else
+    {
+        shader.setBool("material.use_texture_diffuse", false);
+        shader.setVec3("material.ambient_color", material.Ka);
+        shader.setVec3("material.diffuse_color", material.Kd);
+    }                                                                                                                           
+    if (useTextureSpecular)                                                                                                     
+        shader.setBool("material.use_texture_specular", true);                                                                  
+    else
+    {
+        shader.setBool("material.use_texture_specular", false);
+        shader.setVec3("material.specular_color", material.Ks);
+    }
+    shader.setFloat("material.shininess", material.Ns);
 	
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    //glDrawArrays(GL_TRIANGLES, 0, vertices.size());
     glBindVertexArray(0);
 	
     glActiveTexture(GL_TEXTURE0);
@@ -74,10 +93,15 @@ void disc0ver::Mesh::addMaterial(Material material)
 {
     /* 添加材质 */
     this->material = std::move(material);
-    useMaterial = true;
+    // 此处纹理名称可以随意填写 
 	if(!this->material.map_Kd.empty())
 	{
-        Texture texture("texture1", this->material.map_Kd.c_str());
+        Texture texture(this->material.map_Kd, this->material.map_Kd.c_str());
         textures.push_back(texture);
 	}
+    if (!this->material.map_Ks.empty())
+    {
+        Texture texture("material.texture_specular", this->material.map_Ks.c_str(), TextureType::SPECULAR);
+        textures.push_back(texture);
+    }
 }
