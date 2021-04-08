@@ -4,6 +4,7 @@
 #include "../render/graph.h"
 #include "../render/camera.h"
 #include "../engine/light/light.h"
+#include "../engine/window/window.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -19,51 +20,19 @@
 
 #include "../stb_image.h"
 
-//窗口回调函数
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-//鼠标按键回调(左右键点击)
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-//鼠标回调(移动)
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void mouse_callback1(GLFWwindow* window, double xpos, double ypos);
-//鼠标滚轮回调
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-//处理用户输入 WASD ESC
-void processInput(GLFWwindow* window);
-
-//窗口初始大小
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
-
 //FPS相机
 disc0ver::FPSCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-
-//记录鼠标坐标
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
 
 //记录时间帧间隔
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 int test_master_main() {
+	
 	//glfw初始化
 	glfwInit();
 	//创建窗口
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "disc0ver", NULL, NULL);
-	if (window == NULL) {
-		std::cout << "Fail to create window" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-	glfwSwapInterval(1);
-	//设置回调函数
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
-	//glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scroll_callback);
+	disc0ver::Window& window = disc0ver::Window::getInstance(800, 600, "disc0ver", &camera);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
@@ -75,44 +44,33 @@ int test_master_main() {
 
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplGlfw_InitForOpenGL(window.getGlfwWindowObject(), true);
 	ImGui_ImplOpenGL3_Init("#version 420 core");
 	ImGui::StyleColorsClassic();
 
 	disc0ver::Shader shader("shader/phong.vs", "shader/phong.fs");
+	disc0ver::Shader lightShader("shader/light_shader.vs", "shader/light_shader.fs");
 
-	disc0ver::Light light();
-	//disc0ver::rectangleModel rect;
 	std::vector<std::shared_ptr<disc0ver::IBaseModel>> models;
 	
 	std::shared_ptr<disc0ver::IBaseModel> cube(new disc0ver::cubeModel());
 	std::shared_ptr<disc0ver::IBaseModel> rect(new disc0ver::rectangleModel());
-	//models.push_back(cube);
-	//models.push_back(rect);
-	//std::cout << models[1]->vertices.size() << std::endl;
+	std::shared_ptr<disc0ver::pointLightModel> pointLight(new disc0ver::pointLightModel());
+	cube->transform.position = disc0ver::Position(2.0f, 0.0f, 0.0f);
+	rect->transform.position = disc0ver::Position(-2.0f, 0.0f, 0.0f);
+	pointLight->transform.position = disc0ver::Position(0.0f, 0.0f, 3.0f);
+	models.push_back(cube);
+	models.push_back(rect);
 	try
 	{
-		//std::shared_ptr<disc0ver::IBaseModel> model(new disc0ver::STLModel("leo6033-2020.stl"));
-		std::shared_ptr<disc0ver::IBaseModel> model(new disc0ver::Model("models/Marry.obj"));
-		models.push_back(model);
+		std::shared_ptr<disc0ver::IBaseModel> model1(new disc0ver::STLModel("models/stlModels/github-skyline/leo6033-2020.stl"));
+		std::shared_ptr<disc0ver::IBaseModel> model2(new disc0ver::Model("models/objModels/Marry/Marry.obj"));
+		models.push_back(model1);
+		models.push_back(model2);
 	}catch (const char* msg)
 	{
 		std::cerr << msg << std::endl;
 	}
-	
-	//rect.Init();
-	//rect.addTexture("texture1", "wall.jpg");
-	//rect.addTexture("texture2", "awesomeface.png");
-
-	/*cube.Init();
-	cube.addTexture("texture1", "wall.jpg");
-	cube.addTexture("texture2", "awesomeface.png");*/
-
-	for(auto& model : models)
-	{
-		model->Init();
-	}
-	
 
 	shader.use();
 
@@ -120,11 +78,13 @@ int test_master_main() {
 	shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
 	bool show_demo_window = true;
-	int width, height;
 
-	while (!glfwWindowShouldClose(window)) {
+	disc0ver::DirLight dirLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.5f, 0.5f, 0.5f));
+	disc0ver::setLightAllAttribute(shader, "dirLight", &dirLight);
 
-		glfwPollEvents();
+	while (!window.shouldClose()) {
+
+		window.pollEvents();
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -134,10 +94,11 @@ int test_master_main() {
 			ImGui::Begin("Another Window", &show_demo_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 			ImGui::Text("Hello from another window!");
 			if (ImGui::Button("Close Me"))
-				glfwSetWindowShouldClose(window, true);
+				//glfwSetWindowShouldClose(window, true);
+				glfwSetWindowShouldClose(window.getGlfwWindowObject(), true);
 			if (ImGui::Button("new window"))
 			{
-				GLFWwindow* newwindow = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "new window", NULL, NULL);
+				GLFWwindow* newwindow = glfwCreateWindow(800, 600, "new window", NULL, NULL);
 
 			}
 			ImGui::End();
@@ -148,49 +109,36 @@ int test_master_main() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		// 处理用户输入
-		processInput(window);
+		window.processInput(deltaTime);
 
-		//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//rect.transform.position.y = -0.5f;
-		//rect.transform.rotation.z = (float)glfwGetTime();
-
-		//cube.transform.position.y = -0.5f;
-		//cube.transform.rotation.z = (float)glfwGetTime();
-
-		for(auto& model : models)
-		{
-			model->transform.position.y = -0.5f;
-			//model->transform.rotation.z = (float)glfwGetTime();
-			//model->transform.rotation.x = -90;
-		}
-		
-
 		shader.use();
-		glfwGetFramebufferSize(window, &width, &height);
-		glm::mat4 projection = glm::perspective(glm::radians(camera.zoom_), (float)width / (float)height, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.zoom_), (float)window.getWindowWidth() / (float)window.getWindowHeight(), 0.1f, 100.0f);
 		shader.setMat4("projection", projection);
 
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("view", view);
 		shader.setVec3("viewPos", camera.position_);
-		shader.setVec3("lightPos", std::sin((float)glfwGetTime() * 6) * 100.0f, std::cos((float)glfwGetTime() * 4) * 150.0f, std::cos((float)glfwGetTime() * 2) * 100.0f);
-		unsigned int transformLoc = glGetUniformLocation(shader.ID, "model");
-		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(rect.transform.trans));
-		//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(cube.transform.trans));
+		//shader.setVec3("lightPos", std::sin((float)glfwGetTime() * 6) * 100.0f, std::cos((float)glfwGetTime() * 4) * 150.0f, std::cos((float)glfwGetTime() * 2) * 100.0f);
+		shader.setVec3("lightPos", glm::vec3(100.0f, 100.0f, 200.0f));
 
-		//rect.draw(shader);
-		//cube.draw(shader);
 		for (auto& model : models)
 		{
-			glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model->transform.trans));
+			shader.setMat4("model", model->transform.trans);
 			model->draw(shader);
 		}
+
+		lightShader.use();
+		lightShader.setMat4("model", pointLight->transform.trans);
+		lightShader.setMat4("view", view);
+		lightShader.setMat4("projection", projection);
+		pointLight->draw(lightShader);
+
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		glfwSwapBuffers(window);
+		window.swapBuffers();
 	}
 
 	ImGui_ImplOpenGL3_Shutdown();
@@ -200,69 +148,4 @@ int test_master_main() {
 	glfwTerminate();
 
 	return 0;
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
-
-void processInput(GLFWwindow* window) {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(disc0ver::FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(disc0ver::BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(disc0ver::LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.ProcessKeyboard(disc0ver::RIGHT, deltaTime);
-}
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-{
-	if (action == GLFW_PRESS) switch (button)
-	{
-	case GLFW_MOUSE_BUTTON_RIGHT:
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		glfwSetCursorPosCallback(window, mouse_callback);
-		break;
-	default:
-		return;
-	}
-	if (action != GLFW_PRESS) {
-		firstMouse = true;
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		glfwSetCursorPosCallback(window, mouse_callback1);
-	}
-
-	return;
-}
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
-
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos;
-
-	lastX = xpos;
-	lastY = ypos;
-
-	camera.ProcessMouseMovement(xoffset, yoffset);
-}
-
-void mouse_callback1(GLFWwindow* window, double xpos, double ypos)
-{
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	camera.ProcessMouseScroll(yoffset);
 }
