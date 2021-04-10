@@ -51,7 +51,7 @@ void disc0ver::Mesh::Draw(Shader &shader)
         shader.setBool("material.use_texture_specular", false);
         shader.setVec3("material.specular_color", material.Ks);
     }
-    shader.setFloat("material.shininess", material.Ns);
+    shader.setFloat("material.shininess", material.Ns / 1000 * 256);
 	
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

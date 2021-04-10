@@ -40,7 +40,7 @@ namespace disc0ver
         Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
         void Draw(Shader &shader);
 		void addMaterial(Material material);
-		Material& getMaterial() { return material; }
+		Material* getMaterial() { return &material; }
     private:
         /*  顶点数组对象 顶点缓冲对象 索引缓冲对象  */
         unsigned int VAO, VBO, EBO;
