@@ -54,6 +54,48 @@ namespace disc0ver {
 		TextureType textureType;
 	};
 
+	enum class DefaultMaterialType
+	{
+		// 祖母绿
+		emerald,
+		// 玉
+		jade,
+		// 黑曜石
+		obsidian,
+		// 珍珠
+		pearl,
+		// 红宝石
+		ruby,
+		// 绿松石
+		turquoise,
+		// 黄铜
+		brass,
+		// 青铜
+		bronze,
+		// 铬
+		chrome,
+		// 铜
+		copper,
+		// 金
+		gold,
+		// 银
+		silver,
+		// 各种颜色的塑料
+		black_plastic,
+		cyan_plastic,
+		green_plastic,
+		red_plastic,
+		white_plastic,
+		yellow_plastic,
+		// 各种颜色的橡胶
+		black_rubber,
+		cyan_rubber,
+		green_rubber,
+		red_rubber,
+		white_rubber,
+		yellow_rubber
+	};
+
 	class Material
 	{
 		/* 
@@ -63,16 +105,18 @@ namespace disc0ver {
 			(1) 它包含了很多属性 你可以仅仅设置自己需要的属性——只要和shader匹配即可
 			(2) 对于各类型的贴图 它仅仅支持1张——对目前的学习来说 这应该足够了 如果你有自己的想法 可以在此基础上进行扩展 同时也要修改其它部分的代码...(看起来是个大工程orz)
 			(3) 虽然这里把环境光贴图和漫反射贴图分开了 不过在大多数情况下它们都是相同的——所以在shader中我们认为它们是相同的 如果你想要使用不同的贴图 那么也需要对shader进行更改
+			(4) 我们为你准备了一些默认材质 详见 setMaterial 函数
 		*/
 	public:
 		Material()
 		{
-			Ns = 0.0f;
-			Ni = 0.0f;
-			d = 0.0f;
-			illum = 0;
+			// Bronze
+			Ka = Rgb(0.2125f, 0.1275f, 0.054f);
+			Kd = Rgb(0.714f, 0.4284f, 0.18144f);
+			Ks = Rgb(0.393548f, 0.271906f, 0.166721f);
+			Ns = 0.2 * 128;
 		}
-
+		void setMaterial(DefaultMaterialType materialType);
 		// Material Name - 名称
 		std::string name;
 		// Ambient Color - 环境光
