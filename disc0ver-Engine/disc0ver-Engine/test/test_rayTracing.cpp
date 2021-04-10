@@ -84,7 +84,6 @@ int test_ray_tracing_main() {
 
 	disc0ver::rectangleModel canvas;
 
-	canvas.Init();
 	canvas.transform.position = { 0.0f, 0.0f, 0.0f };
 	canvas.transform.scale = { 4.0f,3.0f,1.0f };
 	canvas.transform.use();
@@ -189,13 +188,13 @@ void processInput_raytracing(GLFWwindow* window) {
 		glfwSetWindowShouldClose(window, true);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		rayCamera.ProcessKeyboard(disc0ver::FORWARD, deltaTime_raytracing);
+		rayCamera.ProcessKeyboard(disc0ver::CameraMovementDirection::FORWARD, deltaTime_raytracing);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		rayCamera.ProcessKeyboard(disc0ver::BACKWARD, deltaTime_raytracing);
+		rayCamera.ProcessKeyboard(disc0ver::CameraMovementDirection::BACKWARD, deltaTime_raytracing);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		rayCamera.ProcessKeyboard(disc0ver::LEFT, deltaTime_raytracing);
+		rayCamera.ProcessKeyboard(disc0ver::CameraMovementDirection::LEFT, deltaTime_raytracing);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		rayCamera.ProcessKeyboard(disc0ver::RIGHT, deltaTime_raytracing);
+		rayCamera.ProcessKeyboard(disc0ver::CameraMovementDirection::RIGHT, deltaTime_raytracing);
 }
 
 void mouse_button_callback_raytracing(GLFWwindow* window, int button, int action, int mods)

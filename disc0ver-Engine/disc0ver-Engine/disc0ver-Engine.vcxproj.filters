@@ -46,6 +46,12 @@
     <Filter Include="源文件\util">
       <UniqueIdentifier>{3a8b9367-fb50-4302-b06c-028123339852}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\engine\window">
+      <UniqueIdentifier>{9a60bfb3-c175-43df-86c7-38d008cb52ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\engine\window">
+      <UniqueIdentifier>{a69345a3-08d7-45ce-abab-f458163525c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -98,6 +104,12 @@
     </ClCompile>
     <ClCompile Include="test\test_rayTracing.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\light\light.cpp">
+      <Filter>源文件\engine\light</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\window\window.cpp">
+      <Filter>源文件\engine\window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="test\test_total.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\window\window.h">
+      <Filter>头文件\engine\window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

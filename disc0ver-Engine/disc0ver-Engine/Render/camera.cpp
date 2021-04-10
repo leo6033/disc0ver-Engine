@@ -5,13 +5,8 @@
  * @Date: 2020-10-07
  */
 
-#ifndef CAMERA_H
-#define CAMERA_H
-
 #include "camera.h"
 
-
-#endif // !CAMERA_H
 
 /*得到view矩阵*/
 glm::mat4 disc0ver::IBaseCamera::GetViewMatrix() const
@@ -55,16 +50,16 @@ disc0ver::FPSCamera::FPSCamera(float pos_x, float pos_y, float pos_z, float up_x
 }
 
 /*处理键盘输入 WASD控制相机移动*/
-void disc0ver::FPSCamera::ProcessKeyboard(CameraMovement direction, float deltaTime)
+void disc0ver::FPSCamera::ProcessKeyboard(CameraMovementDirection direction, float deltaTime)
 {
 	float velocity = movement_speed_ * deltaTime;
-	if (direction == FORWARD)
+	if (direction == CameraMovementDirection::FORWARD)
 		position_ += forward_ * velocity;
-	if (direction == BACKWARD)
+	if (direction == CameraMovementDirection::BACKWARD)
 		position_ -= forward_ * velocity;
-	if (direction == LEFT)
+	if (direction == CameraMovementDirection::LEFT)
 		position_ -= right_ * velocity;
-	if (direction == RIGHT)
+	if (direction == CameraMovementDirection::RIGHT)
 		position_ += right_ * velocity;
 }
 
