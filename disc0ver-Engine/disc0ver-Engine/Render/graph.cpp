@@ -63,7 +63,6 @@ void disc0ver::rectangleModel::addTexture(std::string textureName, const GLchar*
 {
 	/* 矩形模型——添加纹理 */
 	Texture texture(textureName, texturePath);
-	textures[textureName] = texture;
 	meshes[0].textures.push_back(texture);
 }
 
@@ -83,7 +82,6 @@ void disc0ver::cubeModel::addTexture(std::string textureName, const GLchar* text
 {
 	/* 立方体模型——添加纹理 */
 	Texture texture(textureName, texturePath);
-	textures[textureName] = texture;
 	meshes[0].textures.push_back(texture);
 }
 
@@ -97,18 +95,6 @@ void disc0ver::STLModel::draw(Shader& shader)
 	{
 		mesh.Draw(shader);
 	}
-}
-
-void disc0ver::STLModel::addTexture(std::string textureName, const GLchar* texturePath)
-{
-	/* 
-		.stl Model 添加纹理 
-
-		我建议不要使用这个函数 因为模型文件有其对应的纹理(如果有 则相关信息可以在.mtl文件中找到) 添加不匹配的纹理可能造成奇怪的结果
-	*/
-	Texture texture(textureName, texturePath);
-	textures[textureName] = texture;
-	meshes[0].textures.push_back(texture);
 }
 
 void disc0ver::STLModel::loadModel(const std::string path)
@@ -189,18 +175,6 @@ void disc0ver::Model::draw(Shader& shader)
 	{
 		mesh.Draw(shader);
 	}
-}
-
-void disc0ver::Model::addTexture(std::string textureName, const GLchar* texturePath)
-{
-	/* 
-		.obj 添加纹理 
-
-		我建议不要使用这个函数 因为模型文件有其对应的纹理(如果有 则相关信息可以在.mtl文件中找到) 添加不匹配的纹理可能造成奇怪的结果
-	*/
-	Texture texture(textureName, texturePath);
-	textures[textureName] = texture;
-	meshes[0].textures.push_back(texture);
 }
 
 void disc0ver::Model::loadModel(const std::string path)

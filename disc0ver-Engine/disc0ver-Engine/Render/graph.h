@@ -30,6 +30,7 @@ namespace disc0ver {
 		virtual ~IBaseModel() = default;
 		virtual void draw(Shader& shader) = 0; // 绘制图形
 		virtual void addTexture(std::string textureName, const GLchar* texturePath) = 0;
+		virtual Material* getMaterial() = 0;
 		Transform transform;
 	};
 
@@ -40,8 +41,7 @@ namespace disc0ver {
 		~rectangleModel() {};
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
-		Material& getMaterial() { return meshes[0].getMaterial(); }
-		std::map<std::string, Texture> textures;
+		Material* getMaterial() override { return meshes[0].getMaterial(); }
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices = {
@@ -70,8 +70,7 @@ namespace disc0ver {
 		~cubeModel() {};
 		void draw(Shader& shader) override;
 		void addTexture(std::string textureName, const GLchar* texturePath) override;
-		Material& getMaterial() { return meshes[0].getMaterial(); }
-		std::map<std::string, Texture> textures;
+		Material* getMaterial() override { return meshes[0].getMaterial(); }
 
 	private:
 		std::vector<Mesh> meshes;
@@ -147,14 +146,19 @@ namespace disc0ver {
 			scale(meshes, transform);
 		}
 		void draw(Shader& shader) override;
-		void addTexture(std::string textureName, const GLchar* texturePath) override;
-		std::map<std::string, Texture> textures;
+
+		// 我建议不要使用这个函数 因为模型文件有其对应的纹理(如果有 则相关信息可以在.mtl文件中找到) 添加不匹配的纹理可能造成奇怪的结果 这也是为什么它什么都不做
+		void addTexture(std::string textureName, const GLchar* texturePath) override { }
+		// 这个函数同理
+		Material* getMaterial() override { return nullptr; }
+
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 
 		void loadModel(const std::string path);
+
 	};
 
 	// .obj 模型
@@ -169,8 +173,12 @@ namespace disc0ver {
 			scale(meshes, transform);
 		}
 		void draw(Shader& shader) override;
-		void addTexture(std::string textureName, const GLchar* texturePath) override;
-		std::map<std::string, Texture> textures;
+
+		// 我建议不要使用这个函数 因为模型文件有其对应的纹理(如果有 则相关信息可以在.mtl文件中找到) 添加不匹配的纹理可能造成奇怪的结果 这也是为什么它什么都不做
+		void addTexture(std::string textureName, const GLchar* texturePath) override { }
+		// 这个函数同理
+		Material* getMaterial() override { return nullptr; }
+
 	private:
 		std::vector<Mesh> meshes;
 		std::vector<Vertex> vertices;
