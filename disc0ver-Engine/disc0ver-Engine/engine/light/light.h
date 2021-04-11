@@ -73,7 +73,7 @@ namespace disc0ver {
 		float outerCutOff;
 
 		SpotLight(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular,
-			float constant = 1.0f, float linear = 0.09f, float quadratic = 0.032f, float cutOff = cos(glm::radians(12.5f)), float outerCutOff = cos(glm::radians(17.5f))) :
+			float constant = 1.0f, float linear = 0.7f, float quadratic = 1.8f, float cutOff = cos(glm::radians(12.5f)), float outerCutOff = cos(glm::radians(17.5f))) :
 			AttenuationLight(ambient, diffuse, specular, constant, linear, quadratic), position(position), direction(direction), cutOff(cutOff), outerCutOff(outerCutOff) {}
 	};
 
