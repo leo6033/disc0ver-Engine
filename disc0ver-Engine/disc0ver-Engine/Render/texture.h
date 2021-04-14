@@ -3,6 +3,10 @@
  * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-09-30
+ *
+ * @Author: xiji
+ * @Email: wncka@foxmail.com
+ * @Date: 2021-04-13
  */
 
 #pragma once
@@ -14,13 +18,14 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "..\math\DGM.h"
+#include <unordered_map>
 
 #include <glm/glm.hpp>
 
 namespace disc0ver {
 
 	// 纹理类型 目前支持 漫反射(环境光)贴图 镜面光贴图
-	enum class TextureType 
+	enum class TextureType
 	{
 		DIFFUSE,
 		SPECULAR
@@ -30,12 +35,15 @@ namespace disc0ver {
 		/*纹理对象*/
 	public:
 		unsigned int texture;
-		Texture() {};
+		Texture() :texture(0), textureType(TextureType::DIFFUSE) {}
 		Texture(std::string textureName, const GLchar* texturePath, TextureType textureType = TextureType::DIFFUSE, bool flipVertically = true);
+		Texture(std::string textureName, std::string texturePath, TextureType textureType = TextureType::DIFFUSE, bool flipVertically = true) :
+			Texture(textureName, texturePath.c_str(), textureType, flipVertically) {}
 		void use(unsigned int ID);
 		std::string getName() const { return textureName; }
 		TextureType getType() const { return textureType; }
-		std::string getTypeString() const
+
+		static std::string getTypeString(TextureType textureType)
 		{
 			switch (textureType)
 			{
@@ -49,7 +57,14 @@ namespace disc0ver {
 				break;
 			}
 		}
+
+		std::string getTypeString() const
+		{
+			return getTypeString(textureType);
+		}
 	private:
+		// 纹理图像文件路径到纹理对象的哈希表 保证每个纹理只被加载一次 从而节省资源(简单起见 就不回收资源了 即glDeleteTextures(1, &texture)操作)
+		static std::unordered_map<std::string, Texture> textureHashTable;
 		std::string textureName;
 		TextureType textureType;
 	};
@@ -98,9 +113,9 @@ namespace disc0ver {
 
 	class Material
 	{
-		/* 
+		/*
 			材质
-			
+
 			tips：
 			(1) 它包含了很多属性 你可以仅仅设置自己需要的属性——只要和shader匹配即可
 			(2) 对于各类型的贴图 它仅仅支持1张——对目前的学习来说 这应该足够了 如果你有自己的想法 可以在此基础上进行扩展 同时也要修改其它部分的代码...(看起来是个大工程orz)
@@ -115,8 +130,40 @@ namespace disc0ver {
 			Kd = Rgb(0.714f, 0.4284f, 0.18144f);
 			Ks = Rgb(0.393548f, 0.271906f, 0.166721f);
 			Ns = 0.2 * 128;
+			Ni = 0.0;
+			d = 0.0;
+			illum = 0;
 		}
+
+		Material(const Material& m) :name(m.name), Ka(m.Ka), Kd(m.Kd), Ks(m.Ks), Ns(m.Ns), Ni(m.Ni), d(m.d), illum(m.illum),
+			map_Ka(m.map_Ka), map_Kd(m.map_Kd), map_Ks(m.map_Ks), map_d(m.map_d), map_bump(m.map_bump) { }
+
+		Material& operator=(const Material& m) = default;
+
+		Material(Material&& m) noexcept :name(std::move(m.name)), Ka(m.Ka), Kd(m.Kd), Ks(m.Ks), Ns(m.Ns), Ni(m.Ni), d(m.d), illum(m.illum),
+			map_Ka(std::move(m.map_Ka)), map_Kd(std::move(m.map_Kd)), map_Ks(std::move(m.map_Ks)), map_d(std::move(m.map_d)), map_bump(std::move(m.map_bump)) { }
+
+		Material& operator=(Material&& m) noexcept
+		{
+			name = std::move(m.name);
+			Ka = m.Ka;
+			Kd = m.Kd;
+			Ks = m.Ks;
+			Ns = m.Ns;
+			Ni = m.Ni;
+			d = m.d;
+			illum = m.illum;
+			map_Ka = std::move(m.map_Ka);
+			map_Kd = std::move(m.map_Kd);
+			map_Ks = std::move(m.map_Ks);
+			map_Ns = std::move(m.map_Ns);
+			map_d = std::move(m.map_d);
+			map_bump = std::move(m.map_bump);
+			return *this;
+		}
+
 		void setMaterial(DefaultMaterialType materialType);
+
 		// Material Name - 名称
 		std::string name;
 		// Ambient Color - 环境光
