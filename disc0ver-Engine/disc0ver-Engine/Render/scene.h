@@ -8,11 +8,11 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-namespace disc0ver{
+namespace disc0ver {
 	class Scene
 	{
-		
+
 	};
-	
+
 }
 #endif

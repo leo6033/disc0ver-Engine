@@ -1,3 +1,10 @@
+/*
+ * @Description: 窗口类
+ * @Author: xiji
+ * @Email: wncka@foxmail.com
+ * @Date: 2021-4-14
+ */
+
 #pragma once
 #ifndef WINDOW_H
 #define WINDOW_H
@@ -56,7 +63,7 @@ namespace disc0ver
 
 		// 窗口是否需要关闭
 		int shouldClose() { return glfwWindowShouldClose(glfwWindow); }
-		
+
 		// 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数
 		void pollEvents() { glfwPollEvents(); }
 
@@ -97,4 +104,3 @@ namespace disc0ver
 
 }
 #endif // !WINDOW_H
-

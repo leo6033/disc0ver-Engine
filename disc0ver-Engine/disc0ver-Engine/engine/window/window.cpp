@@ -1,3 +1,9 @@
+/*
+ * @Description: 光源类
+ * @Author: xiji
+ * @Email: wncka@foxmail.com
+ * @Date: 2021-04-13
+ */
 #include "window.h"
 
 using disc0ver::Window;
@@ -35,7 +41,7 @@ void disc0ver::Window::processInput(float deltaTime)
 void disc0ver::Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mode)
 {
 	// 按下
-	if(action==GLFW_PRESS)
+	if (action == GLFW_PRESS)
 	{
 		switch (button)
 		{

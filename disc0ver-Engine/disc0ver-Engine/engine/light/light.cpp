@@ -1,3 +1,14 @@
+/*
+ * @Description: 光源类
+ * @Author: 妄想
+ * @Email: long452a@163.com
+ * @Date: 2020-10-16
+ *
+ * @Author: xiji
+ * @Email: wncka@foxmail.com
+ * @Date: 2021-04-13
+ */
+
 #include "light.h"
 
 using std::string;
@@ -10,7 +21,7 @@ using disc0ver::SpotLight;
 
 void disc0ver::setLightAllAttribute(const Shader& shader, const string& uniformName, const DirLight* dirLights, int len)
 {
-	/* 
+	/*
 		为glsl中的方向光uniform变量设置所有属性的值：
 		direction ambient diffuse specular
 	*/
@@ -35,7 +46,7 @@ void disc0ver::setLightAllAttribute(const Shader& shader, const string& uniformN
 
 void disc0ver::setLightAllAttribute(const Shader& shader, const string& uniformName, const PointLight* pointLights, int len)
 {
-	/* 
+	/*
 		为glsl中的点光源uniform变量设置所有属性的值:
 		position ambient diffuse specular constant linear quadratic
 	*/
@@ -66,9 +77,9 @@ void disc0ver::setLightAllAttribute(const Shader& shader, const string& uniformN
 
 void disc0ver::setLightAllAttribute(const Shader& shader, const string& uniformName, const SpotLight* spotLights, int len)
 {
-	/* 
+	/*
 		为glsl中的聚光灯uniform变量设置所有属性的值:
-		position direction ambient diffuse specular constant linear quadratic cutOff outerCutOff	
+		position direction ambient diffuse specular constant linear quadratic cutOff outerCutOff
 	*/
 	if (len == 1)
 	{
@@ -100,4 +111,3 @@ void disc0ver::setLightAllAttribute(const Shader& shader, const string& uniformN
 		}
 	}
 }
-

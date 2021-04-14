@@ -9,7 +9,7 @@
 
 disc0ver::Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
 	/*
-	着色器程序构造函数 
+	着色器程序构造函数
 	参数一：顶点着色器代码文件路径
 	参数二：片段着色器代码文件路径
 	*/

@@ -79,7 +79,7 @@ int test_ray_tracing_main() {
 	disc0ver::Shader shader("shader/raytracingPlus.vs", "shader/raytracingPlus.fs");
 
 	//  perspective projection matrix
-	auto perspectiveMat = glm::perspective(glm::radians(rayCamera.zoom_), 
+	auto perspectiveMat = glm::perspective(glm::radians(rayCamera.zoom_),
 		(float)SCR_WIDTH_raytracing / (float)SCR_HEIGHT_raytracing, 0.1f, 100.0f);
 
 	disc0ver::rectangleModel canvas;
@@ -99,7 +99,7 @@ int test_ray_tracing_main() {
 	float aspect = (float)appSize.x / (float)appSize.y;
 	float height = 2 * tan(theta / 2);
 	float width = height * aspect;
-	leftButtom = rayCamera.position_ + rayCamera.forward_- width / 2 * rayCamera.right_ - height / 2 * rayCamera.up_;
+	leftButtom = rayCamera.position_ + rayCamera.forward_ - width / 2 * rayCamera.right_ - height / 2 * rayCamera.up_;
 	horizontal = width * rayCamera.right_;
 	vertical = height * rayCamera.up_;
 	shader.setVec3("_camera.lookFrom", rayCamera.position_);
@@ -112,12 +112,12 @@ int test_ray_tracing_main() {
 	bool show_demo_window = true;
 
 	glEnable(GL_DEPTH_TEST);
-	
+
 	srand((unsigned int)time(NULL));
 	float rdSeed[4];
 	int SamplerTimes = 3;
 	float sssTime = 0.0f;
-	
+
 	while (!glfwWindowShouldClose(window)) {
 
 		glfwPollEvents();
@@ -130,7 +130,7 @@ int test_ray_tracing_main() {
 			ImGui::Begin("Raytracing Properties", &show_demo_window);
 			//--Raytracing UI
 			ImGui::SliderInt("Sampler Times Per Second", &SamplerTimes, 3, 40);
-			
+
 			ImGui::End();
 		}
 
@@ -143,7 +143,7 @@ int test_ray_tracing_main() {
 		glfwGetWindowSize(window, &(appSize.x), &appSize.y);
 
 		processInput_raytracing(window);
-		
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
