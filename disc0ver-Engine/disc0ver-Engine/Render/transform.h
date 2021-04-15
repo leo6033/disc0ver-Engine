@@ -3,6 +3,10 @@
  * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-10-02
+ *
+ * @Author: xiji
+ * @Email: wncka@foxmail.com
+ * @Date: 2021-4-14
  */
 
 #pragma once
@@ -24,8 +28,8 @@ namespace disc0ver {
 		Transform(Rotation rotation, Position position, Scale scale) : rotation(rotation), position(position), scale(scale), trans(glm::mat4(1.0)) {}
 		glm::mat4 trans = glm::mat4(1.0f);
 		void use();
-	//private:
-		//旋转 平移 缩放矩阵
+		//private:
+			//旋转 平移 缩放矩阵
 		Rotation rotation = { 0.0f, 0.0f, 0.0f };
 		Position position = { 0.0f, 0.0f, 0.0f };
 		Scale scale = { 1.0f, 1.0f, 1.0f };

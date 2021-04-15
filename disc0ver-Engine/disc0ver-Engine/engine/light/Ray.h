@@ -14,7 +14,7 @@
 namespace disc0ver {
 	class Ray {
 	public:
-		
+
 
 	public:
 		float tMax;

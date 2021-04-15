@@ -3,12 +3,16 @@
  * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-10-07
+ *
+ * @Author: xiji
+ * @Email: wncka@foxmail.com
+ * @Date: 2021-4-14
  */
 
 #include "camera.h"
 
 
-/*得到view矩阵*/
+ /*得到view矩阵*/
 glm::mat4 disc0ver::IBaseCamera::GetViewMatrix() const
 {
 	//参数一 摄像机位置
@@ -26,7 +30,7 @@ void disc0ver::IBaseCamera::UpdateCameraVectors()
 	front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
 
 	forward_ = glm::normalize(front);
-	right_ = glm::normalize(glm::cross(forward_, world_up_));  
+	right_ = glm::normalize(glm::cross(forward_, world_up_));
 	up_ = glm::normalize(glm::cross(right_, forward_));
 }
 

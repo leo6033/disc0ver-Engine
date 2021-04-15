@@ -161,10 +161,10 @@ void main()
 	// 定向光照
 	vec3 result = CalcDirLight(dirLight, norm, viewDir);
 	// 点光源
-	//for(int i = 0; i < NR_POINT_LIGHTS; i++)
-		//result += CalPointLight(pointLights[i], norm, FragPos, viewDir);
+	for(int i = 0; i < NR_POINT_LIGHTS; i++)
+		result += CalPointLight(pointLights[i], norm, FragPos, viewDir);
 	// 聚光
-	//result += CalSpotLight(spotLight, norm, FragPos, viewDir);
+	result += CalSpotLight(spotLight, norm, FragPos, viewDir);
 	FragColor = vec4(result, 1.0);
 }
 

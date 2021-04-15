@@ -16,4 +16,3 @@ namespace disc0ver {
 }
 
 #endif // !RAYTRACER_H
-

@@ -3,15 +3,15 @@
  * @Author: 妄想
  * @Email: long452a@163.com
  * @Date: 2020-09-27
- * 
- * @Contributor: xiji
+ *
+ * @Author: xiji
  * @Email: wncka@foxmail.com
  * @Date: 2021-04-03
  */
 
 #include "graph.h"
 
-//========================================== some functions ======================================
+ //========================================== some functions ======================================
 
 void disc0ver::scale(const std::vector<Mesh>& meshes, Transform& trans)
 {
@@ -47,44 +47,145 @@ void disc0ver::scale(const std::vector<Mesh>& meshes, Transform& trans)
 	}
 }
 
+//========================================== triangleModel ======================================
+
+std::vector<disc0ver::BaseMesh> disc0ver::triangleModel::meshes;
+
+void disc0ver::triangleModel::draw(Shader& shader)
+{
+	/* 三角形模型——绘制 */
+	transform.use();
+	meshes[0].Draw(shader, textures, material);
+}
+
+void disc0ver::triangleModel::addTexture(std::string textureName, const GLchar* texturePath)
+{
+	/* 三角形模型——添加纹理 */
+	textures.emplace_back(textureName, texturePath);
+}
+
 //========================================== rectangleModel ======================================
 
-void disc0ver::rectangleModel::draw(Shader &shader)
+std::vector<disc0ver::BaseMesh> disc0ver::rectangleModel::meshes;
+
+void disc0ver::rectangleModel::draw(Shader& shader)
 {
 	/* 矩形模型——绘制 */
 	transform.use();
-	for (int i = 0; i < meshes.size(); i++)
-	{
-		meshes[i].Draw(shader);
-	}
+	meshes[0].Draw(shader, textures, material);
 }
 
 void disc0ver::rectangleModel::addTexture(std::string textureName, const GLchar* texturePath)
 {
 	/* 矩形模型——添加纹理 */
-	Texture texture(textureName, texturePath);
-	textures[textureName] = texture;
-	meshes[0].textures.push_back(texture);
+	textures.emplace_back(textureName, texturePath);
+}
+
+
+//========================================== circleModel ======================================
+
+std::vector<disc0ver::BaseMesh> disc0ver::circleModel::meshes;
+
+void disc0ver::circleModel::draw(Shader& shader)
+{
+	/* 圆形模型——绘制 */
+	transform.use();
+	// 圆形模型的索引数组的第一个值对应的点是 圆心 然后是其它点(按顺序连着一圈)
+	// 所以我们要用GL_TRIANGLE_FAN模式进行绘制
+	meshes[0].Draw(shader, textures, material, GL_TRIANGLE_FAN);
+}
+
+void disc0ver::circleModel::addTexture(std::string textureName, const GLchar* texturePath)
+{
+	/* 圆形模型——添加纹理 */
+	textures.emplace_back(textureName, texturePath);
+}
+
+//========================================== hollowCircleModel ======================================
+
+void disc0ver::hollowCircleModel::draw(Shader& shader)
+{
+	/* 圆环模型——绘制 */
+	transform.use();
+	meshes[0].Draw(shader, textures, material, GL_TRIANGLE_STRIP);
+}
+
+void disc0ver::hollowCircleModel::addTexture(std::string textureName, const GLchar* texturePath)
+{
+	/* 圆环模型——添加纹理 */
+	textures.emplace_back(textureName, texturePath);
 }
 
 //========================================== cubeModel ======================================
 
-void disc0ver::cubeModel::draw(Shader &shader)
+std::vector<disc0ver::BaseMesh>disc0ver::cubeModel::meshes;
+
+void disc0ver::cubeModel::draw(Shader& shader)
 {
 	/* 立方体模型——绘制 */
 	transform.use();
-	for (auto& mesh : meshes)
-	{
-		mesh.Draw(shader);
-	}
+	meshes[0].Draw(shader, textures, material);
 }
 
 void disc0ver::cubeModel::addTexture(std::string textureName, const GLchar* texturePath)
 {
 	/* 立方体模型——添加纹理 */
-	Texture texture(textureName, texturePath);
-	textures[textureName] = texture;
-	meshes[0].textures.push_back(texture);
+	textures.emplace_back(textureName, texturePath);
+}
+
+
+//========================================== cylinderModel ======================================
+
+std::vector<disc0ver::BaseMesh>disc0ver::cylinderModel::meshes;
+
+void disc0ver::cylinderModel::draw(Shader& shader)
+{
+	/* 圆柱模型——绘制 */
+	transform.use();
+	std::vector<Texture> emptyTextures;
+	meshes[0].Draw(shader, emptyTextures, material, GL_TRIANGLE_FAN);
+	meshes[1].Draw(shader, emptyTextures, material, GL_TRIANGLE_FAN);
+	meshes[2].Draw(shader, textures, material, GL_TRIANGLE_STRIP);
+}
+
+void disc0ver::cylinderModel::addTexture(std::string textureName, const GLchar* texturePath)
+{
+	/* 圆柱模型——添加纹理 */
+	textures.emplace_back(textureName, texturePath);
+}
+
+
+
+//========================================== sphereModel ======================================
+
+std::vector<disc0ver::BaseMesh> disc0ver::sphereModel::meshes;
+
+void disc0ver::sphereModel::draw(Shader& shader)
+{
+	/* 球体模型——绘制 */
+	transform.use();
+	meshes[0].Draw(shader, textures, material);
+}
+
+void disc0ver::sphereModel::addTexture(std::string textureName, const GLchar* texturePath)
+{
+	/* 球体模型——添加纹理 */
+	textures.emplace_back(textureName, texturePath);
+}
+
+//========================================== ringModel ======================================
+
+void disc0ver::ringModel::draw(Shader& shader)
+{
+	/* 球体模型——绘制 */
+	transform.use();
+	meshes[0].Draw(shader, textures, material);
+}
+
+void disc0ver::ringModel::addTexture(std::string textureName, const GLchar* texturePath)
+{
+	/* 球体模型——添加纹理 */
+	textures.emplace_back(textureName, texturePath);
 }
 
 //========================================== STLModel ======================================
@@ -99,23 +200,11 @@ void disc0ver::STLModel::draw(Shader& shader)
 	}
 }
 
-void disc0ver::STLModel::addTexture(std::string textureName, const GLchar* texturePath)
-{
-	/* 
-		.stl Model 添加纹理 
-
-		我建议不要使用这个函数 因为模型文件有其对应的纹理(如果有 则相关信息可以在.mtl文件中找到) 添加不匹配的纹理可能造成奇怪的结果
-	*/
-	Texture texture(textureName, texturePath);
-	textures[textureName] = texture;
-	meshes[0].textures.push_back(texture);
-}
-
 void disc0ver::STLModel::loadModel(const std::string path)
 {
-	/* 
-		从指定路径加载模型文件(.stl) 
-		
+	/*
+		从指定路径加载模型文件(.stl)
+
 		其格式大致为:
 
 		solid stlmesh
@@ -137,7 +226,7 @@ void disc0ver::STLModel::loadModel(const std::string path)
 	std::string tmp_str;
 	infile.open(path);
 
-	if(!infile.is_open())
+	if (!infile.is_open())
 	{
 		throw "Model file not found";
 	}
@@ -149,7 +238,7 @@ void disc0ver::STLModel::loadModel(const std::string path)
 	solid >> tmp_str;
 	assert(tmp_str == "solid");
 
-	while(!infile.eof())
+	while (!infile.eof())
 	{
 		infile.getline(line, sizeof(line));
 		float n1, n2, n3;
@@ -157,14 +246,14 @@ void disc0ver::STLModel::loadModel(const std::string path)
 		std::istringstream face(line);
 
 		face >> tmp_str;
-		if(tmp_str == "facet")
+		if (tmp_str == "facet")
 		{
 			// 法线坐标
 			face >> tmp_str >> n1 >> n2 >> n3;
 			// outer loop
 			infile.getline(line, sizeof(line));
 			// 三个顶点坐标
-			for(int i = 0; i < 3;i ++)
+			for (int i = 0; i < 3; i++)
 			{
 				infile.getline(line, sizeof(line));
 				std::istringstream vertex(line);
@@ -191,22 +280,10 @@ void disc0ver::Model::draw(Shader& shader)
 	}
 }
 
-void disc0ver::Model::addTexture(std::string textureName, const GLchar* texturePath)
-{
-	/* 
-		.obj 添加纹理 
-
-		我建议不要使用这个函数 因为模型文件有其对应的纹理(如果有 则相关信息可以在.mtl文件中找到) 添加不匹配的纹理可能造成奇怪的结果
-	*/
-	Texture texture(textureName, texturePath);
-	textures[textureName] = texture;
-	meshes[0].textures.push_back(texture);
-}
-
 void disc0ver::Model::loadModel(const std::string path)
 {
-	/* 
-		.obj 加载模型文件(.obj)  
+	/*
+		.obj 加载模型文件(.obj)
 
 		说一下比较常见的属性：
 
@@ -223,10 +300,10 @@ void disc0ver::Model::loadModel(const std::string path)
 
 		mtllib(material library) 开头的是材质库 后跟.mtl文件的名称(可能会有多个 这个例子中只有1个)
 
-		usemtl 后跟材质名称 你可以在.mtl文件中找到对应名称的材质信息 
+		usemtl 后跟材质名称 你可以在.mtl文件中找到对应名称的材质信息
 		usemtl指定了材质之后 以后的面都是使用这一材质 直到遇到下一个usemtl来指定新的材质
 
-		o 对象名 
+		o 对象名
 
 		g 组名称
 
@@ -261,7 +338,7 @@ void disc0ver::Model::loadModel(const std::string path)
 		map_bump 开头的是凹凸贴图
 
 		如果你想了解更多信息 可以去看wiki： https://en.wikipedia.org/wiki/Wavefront_.obj_file
-		
+
 	*/
 	std::cout << "Loading model......\n" << "Path: " << path << '\n' << std::endl;
 	std::ifstream infile;
@@ -280,7 +357,7 @@ void disc0ver::Model::loadModel(const std::string path)
 	unsigned int Index[9];
 	int flag = 0;
 	std::string materialName;
-	
+
 	while (!infile.eof())
 	{
 		infile.getline(line, sizeof(line));
@@ -297,7 +374,7 @@ void disc0ver::Model::loadModel(const std::string path)
 			v.emplace_back(x, y, z);
 		}
 		// 顶点法线坐标
-		else if(tmp_str == "vn")
+		else if (tmp_str == "vn")
 		{
 			ss >> n1 >> n2 >> n3;
 			vn.emplace_back(n1, n2, n3);
@@ -308,12 +385,12 @@ void disc0ver::Model::loadModel(const std::string path)
 			ss >> uvx >> uvy;
 			vt.emplace_back(uvx, uvy);
 		}
-		else if(tmp_str == "f")
+		else if (tmp_str == "f")
 		{
 			// TODO: 不同形式的 f 参数实现
 			std::string s;
 			int index = 0;
-			while(ss >> s)
+			while (ss >> s)
 			{
 				s = s + "/";
 				while (s.find('/') != std::string::npos) {
@@ -323,30 +400,30 @@ void disc0ver::Model::loadModel(const std::string path)
 					s = s.substr(pos + 1, s.size());
 				}
 			}
-			for(int i = 0; i < index;i += 3)
+			for (int i = 0; i < index; i += 3)
 			{
 				vertices.emplace_back(v[Index[i] - 1], vn[Index[i + 2] - 1], vt[Index[i + 1] - 1]);
 			}
 		}
-		else if(tmp_str == "mtllib")
+		else if (tmp_str == "mtllib")
 		{
 			std::string mtPath;
 			ss >> mtPath;
-			if(path.find('/') != std::string::npos)
+			if (path.find('/') != std::string::npos)
 				mtPath = path.substr(0, path.find_last_of('/') + 1) + mtPath;
 			loadMaterial(materials, mtPath);
 		}
-		else if(tmp_str == "usemtl")
+		else if (tmp_str == "usemtl")
 		{
 			ss >> materialName;
 		}
-		else if(tmp_str == "s")
+		else if (tmp_str == "s")
 		{
 			flag = 1;
 		}
-		else if(tmp_str == "o")
+		else if (tmp_str == "o")
 		{
-			if(flag == 1)
+			if (flag == 1)
 			{
 				createMesh(materialName, materials);
 				materialName.clear();
@@ -366,11 +443,11 @@ void disc0ver::Model::createMesh(const std::string& materialName, std::vector<Ma
 	for (int i = 0; i < indices.size(); i++)
 		indices[i] = i;
 	meshes.emplace_back(std::move(vertices), std::move(indices), std::vector<Texture>());
-	if(!materialName.empty())
+	if (!materialName.empty())
 	{
 		for (auto& material : materials)
 		{
-			if(material.name == materialName)
+			if (material.name == materialName)
 			{
 				meshes.back().addMaterial(material);
 				break;
@@ -381,9 +458,9 @@ void disc0ver::Model::createMesh(const std::string& materialName, std::vector<Ma
 
 void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string path)
 {
-	/* 
-		加载mtl文件 
-		
+	/*
+		加载mtl文件
+
 		一个mtl文件可能定义了多个材质 每个材质以newmtl打头 比如 newmtl materialName1
 
 		Ka 开头的是材质的环境颜色 后跟三个[0,1]的float值 代表rgb
@@ -412,13 +489,14 @@ void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string
 
 		如果你想了解更多信息 可以去看wiki： https://en.wikipedia.org/wiki/Wavefront_.obj_file
 	*/
+	std::cout << "Loading material......\n" << "Path: " << path << '\n' << std::endl;
 	std::ifstream infile;
 	std::string tmp_str;
 	infile.open(path);
 
 	if (!infile.is_open())
 	{
-		std::cout << "Load .mtl file fail " << path << std::endl;
+		std::cout << "Loading material fail!!!!!\n" << std::endl;
 		return;
 	}
 
@@ -437,7 +515,7 @@ void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string
 		ss >> tmp_str;
 		if (tmp_str == "newmtl")
 		{
-			if(!listening)
+			if (!listening)
 			{
 				ss >> tempMaterial.name;
 				listening = true;
@@ -445,7 +523,7 @@ void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string
 			else
 			{
 				materials.push_back(tempMaterial);
-				
+
 				tempMaterial = Material();
 				ss >> tempMaterial.name;
 			}
@@ -462,20 +540,20 @@ void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string
 		{
 			ss >> tempMaterial.Ks[0] >> tempMaterial.Ks[1] >> tempMaterial.Ks[2];
 		}
-		else if(tmp_str == "Ns")
+		else if (tmp_str == "Ns")
 		{
 			// mtl中Ns的范围是0-1000
 			ss >> tempMaterial.Ns;
 		}
-		else if(tmp_str == "Ni")
+		else if (tmp_str == "Ni")
 		{
 			ss >> tempMaterial.Ni;
 		}
-		else if(tmp_str == "d")
+		else if (tmp_str == "d")
 		{
 			ss >> tempMaterial.d;
 		}
-		else if(tmp_str == "illum")
+		else if (tmp_str == "illum")
 		{
 			ss >> tempMaterial.illum;
 		}
@@ -485,7 +563,7 @@ void disc0ver::Model::loadMaterial(std::vector<Material>& materials, std::string
 			ss >> mapPath;
 			tempMaterial.map_Ka = directory + mapPath;
 		}
-		else if(tmp_str == "map_Kd")
+		else if (tmp_str == "map_Kd")
 		{
 			std::string mapPath;
 			ss >> mapPath;
